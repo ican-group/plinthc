@@ -1,0 +1,6 @@
+
+ReportCostNoModel.hs:11:1: warning:
+    [Plinth cost] two: 7 bytes, 1 AST nodes; no pinned cost model for PV 12
+   |
+11 | two = $$(compile [|| 1 P.+ 1 ||])
+   | ^^^
