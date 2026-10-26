@@ -1,0 +1,46 @@
+/* Styles of the welcome page (index.md) only. Loaded by _includes/head/custom.html
+   when the page sets `landing: true`. */
+
+/* Bands: each section spans the viewport; the text stays at 950px, the
+   theme's content width. */
+.landing { padding: 3rem 0; }
+.landing--alt { background-color: #f2f2f2; }
+.landing__inner { max-width: 950px; margin: 0 auto; padding: 0 1rem; }
+.landing--hero { text-align: center; }
+.landing h2 { margin: 0 0 1rem; font-size: 1.9rem; }
+.landing--hero h2 { margin-top: .5rem; font-size: 2.2rem; }
+.landing__lead { max-width: 40rem; margin: 0 auto 1.5rem; font-size: 1.2rem; }
+.landing__intro { margin: 0 0 1.5rem; }
+.landing__actions { margin-bottom: 2rem; }
+.landing__actions .button { margin: .25rem; }
+.landing__actions .button svg { vertical-align: -.15em; margin-right: .3em; fill: currentColor; }
+
+/* The code sample: left-aligned text in a centred box. */
+.landing__sample { max-width: 40rem; margin: 0 auto; text-align: left; }
+.landing__sample .highlight pre { margin: 0; overflow-x: auto; }
+.landing__caption { margin: .75rem 0 0; font-size: .85rem; color: #888; }
+
+/* Cards: a white tile on the grey band, a plain cell on the white band. */
+.landing__card { height: 100%; padding: 1rem 1.25rem; text-align: left; }
+.landing--alt .landing__card { background-color: #fff; border: 1px solid rgba(0, 0, 0, .1); border-radius: .4rem; }
+.landing__card h3 { margin: 0 0 .5rem; font-size: 1.2rem; }
+.landing__card p { margin: 0 0 .5rem; }
+.landing__card p:last-child { margin-bottom: 0; }
+.landing code { padding: .1em .3em; font-size: .9em; background-color: rgba(0, 0, 0, .05); border-radius: .2rem; }
+.landing .highlight code { padding: 0; font-size: inherit; background: none; }
+.landing__repos { padding-left: 1.2rem; }
+.landing__repos li { margin-bottom: .3rem; }
+
+@media (max-width: 500px) {
+  .landing { padding: 2rem 0; }
+  .landing--hero h2 { font-size: 1.6rem; }
+  .landing__lead { font-size: 1.05rem; }
+}
+
+/* The wordmark: the animation plays once; anyone who has asked for less
+   motion gets the still instead. */
+.wordmark-still { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .wordmark-anim  { display: none; }
+  .wordmark-still { display: inline; }
+}

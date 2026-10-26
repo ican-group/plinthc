@@ -6,52 +6,12 @@ show_title: false
 sidebar: false
 aside: false
 full_width: true
+landing: true
 ---
 <!-- The welcome page. It uses the theme's page layout without the docs
      sidebar and the in-page TOC, and builds its sections from the theme's
-     grid, button and menu classes. The page-only styles are below. -->
-<style>
-  /* Bands: each section spans the viewport; the text stays at 950px, the
-     theme's content width. */
-  .landing { padding: 3rem 0; }
-  .landing--alt { background-color: #f2f2f2; }
-  .landing__inner { max-width: 950px; margin: 0 auto; padding: 0 1rem; }
-  .landing--hero { text-align: center; }
-  .landing h2 { margin: 0 0 1rem; font-size: 1.9rem; }
-  .landing--hero h2 { margin-top: .5rem; font-size: 2.2rem; }
-  .landing__lead { max-width: 40rem; margin: 0 auto 1.5rem; font-size: 1.2rem; }
-  .landing__intro { margin: 0 0 1.5rem; }
-  .landing__actions { margin-bottom: 2rem; }
-  .landing__actions .button { margin: .25rem; }
-  .landing__actions .button svg { vertical-align: -.15em; margin-right: .3em; fill: currentColor; }
-  /* The code sample: left-aligned text in a centred box. */
-  .landing__sample { max-width: 40rem; margin: 0 auto; text-align: left; }
-  .landing__sample .highlight pre { margin: 0; overflow-x: auto; }
-  .landing__caption { margin: .75rem 0 0; font-size: .85rem; color: #888; }
-  /* Cards: a white tile on the grey band, a plain cell on the white band. */
-  .landing__card { height: 100%; padding: 1rem 1.25rem; text-align: left; }
-  .landing--alt .landing__card { background-color: #fff; border: 1px solid rgba(0, 0, 0, .1); border-radius: .4rem; }
-  .landing__card h3 { margin: 0 0 .5rem; font-size: 1.2rem; }
-  .landing__card p { margin: 0 0 .5rem; }
-  .landing__card p:last-child { margin-bottom: 0; }
-  .landing code { padding: .1em .3em; font-size: .9em; background-color: rgba(0, 0, 0, .05); border-radius: .2rem; }
-  .landing .highlight code { padding: 0; font-size: inherit; background: none; }
-  .landing__repos { padding-left: 1.2rem; }
-  .landing__repos li { margin-bottom: .3rem; }
-  @media (max-width: 500px) {
-    .landing { padding: 2rem 0; }
-    .landing--hero h2 { font-size: 1.6rem; }
-    .landing__lead { font-size: 1.05rem; }
-  }
-  /* The wordmark: the animation plays once; anyone who has asked for less
-     motion gets the still instead. */
-  .wordmark-still { display: none; }
-  @media (prefers-reduced-motion: reduce) {
-    .wordmark-anim  { display: none; }
-    .wordmark-still { display: inline; }
-  }
-</style>
-
+     grid, button and menu classes. The styles are in assets/css/landing.css
+     and the card texts in _data/landing.yml. -->
 <section class="landing landing--hero">
   <div class="landing__inner">
     <!-- The wordmark animation. It plays once and stops on a frame identical to
@@ -135,64 +95,20 @@ validatorCode = $$(PlutusTx.compile [|| untypedValidator ||])
   <div class="landing__inner">
     <h2>Why plinthc</h2>
     <div class="grid grid--p-3">
+      {%- for card in site.data.landing.highlights %}
       <div class="cell cell--12 cell--md-6 cell--lg-4">
         <div class="landing__card">
-          <h3>GHC with Plinth built in</h3>
-          <p>There is no plugin to install or configure. Point cabal at plinthc
-             and it behaves like an ordinary GHC. When a module defines Plinth
-             code, the compiler emits the Plutus Core next to the usual
-             outputs.</p>
-          <p><a href="{% link explanation/standalone-compiler.md %}">How the compiler is built</a></p>
+          <h3>{{ card.title }}</h3>
+          <p>{{ card.text }}</p>
+          <p>
+            {%- for l in card.links -%}
+              {%- unless forloop.first %} &middot; {% endunless -%}
+              <a href="{% link {{ l.page }} %}{% if l.anchor %}#{{ l.anchor }}{% endif %}">{{ l.text }}</a>
+            {%- endfor -%}
+          </p>
         </div>
       </div>
-      <div class="cell cell--12 cell--md-6 cell--lg-4">
-        <div class="landing__card">
-          <h3>Installs with ghcup, next to your GHC</h3>
-          <p>One <code>ghcup install</code> gives you a binary for Linux
-             (x86_64 and aarch64, glibc and musl), macOS (Apple Silicon) or
-             Windows. plinthc never replaces your <code>ghc</code>. Releases
-             track GHC 9.12 and GHC 9.6.</p>
-          <p><a href="{% link how-to/install.md %}">Install plinthc</a></p>
-        </div>
-      </div>
-      <div class="cell cell--12 cell--md-6 cell--lg-4">
-        <div class="landing__card">
-          <h3>The whole Haskell ecosystem</h3>
-          <p>Write the on-chain validator and the off-chain code in one
-             language, even in one file. The same types cross the on-chain
-             boundary safely. Use cabal, GHCi and Hackage as you do today.</p>
-          <p><a href="{% link explanation/languages.md %}">Plinth among the contract languages</a></p>
-        </div>
-      </div>
-      <div class="cell cell--12 cell--md-6 cell--lg-4">
-        <div class="landing__card">
-          <h3>No <code>INLINEABLE</code> pragmas, works at <code>-O0</code></h3>
-          <p>plinthc keeps the definitions the Plinth compiler needs available
-             without pragmas, and its <code>base</code>, <code>ghc-prim</code>
-             and <code>ghc-bignum</code> libraries ship ready for Plinth. You
-             can build Plinth code with <code>-O0</code>.</p>
-          <p><a href="{% link explanation/plinth-language.md %}">The Plinth contract language</a></p>
-        </div>
-      </div>
-      <div class="cell cell--12 cell--md-6 cell--lg-4">
-        <div class="landing__card">
-          <h3>Reproducible Plutus Core</h3>
-          <p>The Plinth translation depends on how GHC compiles the code around
-             it. plinthc pins the compiler and the Plinth compiler together and
-             validates them as one unit, with tests and benchmarks.</p>
-          <p><a href="{% link how-to/build.md %}#test-and-benchmark">Test and benchmark</a></p>
-        </div>
-      </div>
-      <div class="cell cell--12 cell--md-6 cell--lg-4">
-        <div class="landing__card">
-          <h3>Blueprints and local tests</h3>
-          <p>Generate CIP-57 blueprints from Haskell values. Test a contract
-             without a node: as plain Haskell, on the CEK machine, by its
-             execution budget, or on a simulated ledger.</p>
-          <p><a href="{% link how-to/generate-blueprint.md %}">Generate a blueprint</a>
-             &middot; <a href="{% link how-to/test.md %}">Test locally</a></p>
-        </div>
-      </div>
+      {%- endfor %}
     </div>
   </div>
 </section>
@@ -207,35 +123,14 @@ validatorCode = $$(PlutusTx.compile [|| untypedValidator ||])
       <a href="{% link tutorials/first-smart-contract.md %}">Your first smart contract with Plinth</a>.
     </p>
     <div class="grid grid--p-3">
+      {%- for card in site.data.landing.docs %}
       <div class="cell cell--12 cell--md-6 cell--lg-3">
         <div class="landing__card">
-          <h3><a href="{% link explanation/index.md %}">Explanation</a></h3>
-          <p><em>Understanding-oriented.</em> Background and discussion: what
-             Plinth is and how the compiler works.</p>
+          <h3><a href="{% link {{ card.page }} %}">{{ card.title }}</a></h3>
+          <p><em>{{ card.kind }}</em> {{ card.text }}</p>
         </div>
       </div>
-      <div class="cell cell--12 cell--md-6 cell--lg-3">
-        <div class="landing__card">
-          <h3><a href="{% link tutorials/index.md %}">Tutorials</a></h3>
-          <p><em>Learning-oriented.</em> Start here if you are new: hands-on
-             lessons that walk you through compiling your first smart contract
-             and running it on a local chain.</p>
-        </div>
-      </div>
-      <div class="cell cell--12 cell--md-6 cell--lg-3">
-        <div class="landing__card">
-          <h3><a href="{% link how-to/index.md %}">How-to guides</a></h3>
-          <p><em>Task-oriented.</em> Practical recipes for a specific job:
-             install the compiler, use it in a project, test a contract, and
-             generate a blueprint.</p>
-        </div>
-      </div>
-      <div class="cell cell--12 cell--md-6 cell--lg-3">
-        <div class="landing__card">
-          <h3><a href="{% link reference/index.md %}">Reference</a></h3>
-          <p><em>Information-oriented.</em> Dry facts to look up.</p>
-        </div>
-      </div>
+      {%- endfor %}
     </div>
   </div>
 </section>

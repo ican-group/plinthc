@@ -1,0 +1,90 @@
+# Content of the card grids on the welcome page (index.md).
+#
+# `page` is a source file for the `link` tag, so the build fails if the page
+# moves. `anchor` is an optional fragment. `title` and `text` are HTML.
+
+highlights:
+  - title: GHC with Plinth built in
+    text: >-
+      There is no plugin to install or configure. Point cabal at plinthc and
+      it behaves like an ordinary GHC. When a module defines Plinth code, the
+      compiler emits the Plutus Core next to the usual outputs.
+    links:
+      - text: How the compiler is built
+        page: explanation/standalone-compiler.md
+
+  - title: Installs with ghcup, next to your GHC
+    text: >-
+      One <code>ghcup install</code> gives you a binary for Linux (x86_64 and
+      aarch64, glibc and musl), macOS (Apple Silicon) or Windows. plinthc
+      never replaces your <code>ghc</code>. Releases track GHC 9.12 and
+      GHC 9.6.
+    links:
+      - text: Install plinthc
+        page: how-to/install.md
+
+  - title: The whole Haskell ecosystem
+    text: >-
+      Write the on-chain validator and the off-chain code in one language,
+      even in one file. The same types cross the on-chain boundary safely.
+      Use cabal, GHCi and Hackage as you do today.
+    links:
+      - text: Plinth among the contract languages
+        page: explanation/languages.md
+
+  - title: No <code>INLINEABLE</code> pragmas, works at <code>-O0</code>
+    text: >-
+      plinthc keeps the definitions the Plinth compiler needs available
+      without pragmas, and its <code>base</code>, <code>ghc-prim</code> and
+      <code>ghc-bignum</code> libraries ship ready for Plinth. You can build
+      Plinth code with <code>-O0</code>.
+    links:
+      - text: The Plinth contract language
+        page: explanation/plinth-language.md
+
+  - title: Reproducible Plutus Core
+    text: >-
+      The Plinth translation depends on how GHC compiles the code around it.
+      plinthc pins the compiler and the Plinth compiler together and
+      validates them as one unit, with tests and benchmarks.
+    links:
+      - text: Test and benchmark
+        page: how-to/build.md
+        anchor: test-and-benchmark
+
+  - title: Blueprints and local tests
+    text: >-
+      Generate CIP-57 blueprints from Haskell values. Test a contract without
+      a node: as plain Haskell, on the CEK machine, by its execution budget,
+      or on a simulated ledger.
+    links:
+      - text: Generate a blueprint
+        page: how-to/generate-blueprint.md
+      - text: Test locally
+        page: how-to/test.md
+
+docs:
+  - title: Explanation
+    page: explanation/index.md
+    kind: Understanding-oriented.
+    text: >-
+      Background and discussion: what Plinth is and how the compiler works.
+
+  - title: Tutorials
+    page: tutorials/index.md
+    kind: Learning-oriented.
+    text: >-
+      Start here if you are new: hands-on lessons that walk you through
+      compiling your first smart contract and running it on a local chain.
+
+  - title: How-to guides
+    page: how-to/index.md
+    kind: Task-oriented.
+    text: >-
+      Practical recipes for a specific job: install the compiler, use it in a
+      project, test a contract, and generate a blueprint.
+
+  - title: Reference
+    page: reference/index.md
+    kind: Information-oriented.
+    text: Dry facts to look up.
