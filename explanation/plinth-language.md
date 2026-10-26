@@ -97,7 +97,7 @@ whereas PlutusV3 passes a single context argument.)
 
 ## Unfoldings and `INLINEABLE`
 
-The plugin compiles the one function named in the `compile` quote, following
+The compiler compiles the one function named in the `compile` quote, following
 every definition it references. For a referenced definition in another module to
 be available, GHC must keep its **unfolding** (its GHC Core definition) in the
 interface file.
@@ -117,6 +117,10 @@ code from the plugin.
 
 Code from the Plinth template and from the Plutus libraries still has
 `INLINEABLE` pragmas. They are not necessary, but they do no harm.
+
+The compiler also records, for every binding, whether it is valid Plinth, and
+checks each `compile` quote against these records at type-checking time: see
+[Differences from Haskell]({% link explanation/differences-from-haskell.md %}).
 
 ## Sharing with off-chain code
 

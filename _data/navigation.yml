@@ -72,3 +72,6 @@ docs:
 
   - title: Reference
     url: /reference/
+    children:
+      - title: Compiler flags
+        url: /reference/compiler-flags/
