@@ -1,0 +1,9 @@
+
+RecordSelectorBad.hs:8:42: error: [PLINTH-00008]
+    This code is not valid Plinth:
+      RecordSelectorBad.balance (RecordSelectorBad.hs:8:42-48) uses
+      GHC.Types.Char
+    Unsupported feature: Char, use BuiltinString or BuiltinByteString
+  |
+8 | data Account = Account { name :: String, balance :: Integer }
+  |                                          ^^^^^^^

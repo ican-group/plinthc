@@ -1,0 +1,6 @@
+
+DerivingShowUsed.hs:7:42: error:
+    Module ‘PlutusTx.Builtins’ does not export ‘stringToBuiltinString’
+  |
+7 | import PlutusTx.Builtins (BuiltinString, stringToBuiltinString)
+  |                                          ^^^^^^^^^^^^^^^^^^^^^

@@ -136,6 +136,18 @@ CABAL_BUILD_ARGS="\
     GHC="$GHC" ./errors/run-error-tests.sh
     ERR_RC=$?
     set -e
+    if [ "${GATE_SWEEP:-0}" -eq 1 ]; then
+        echo ""
+        echo "Running the Plinth gate sweep (see Note [The gate sweep] in plinth/test/gate-sweep.sh)..."
+        set +e
+        GHC="$GHC" JOBS="$JOBS" ./gate-sweep.sh
+        SWEEP_RC=$?
+        set -e
+        if [ $SWEEP_RC -ne 0 ]; then
+            echo "plinthc-test: the gate sweep failed (exit $SWEEP_RC)"
+            exit 1
+        fi
+    fi
 
     # Run the Plinth compiler test-suites under plinthc.
     # See Note [Plinth compiler test coverage].

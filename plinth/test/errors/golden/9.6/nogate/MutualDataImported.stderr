@@ -1,0 +1,9 @@
+
+MutualDataImported.hs:9:1: error: [PLINTH-00002]
+    Plinth Compilation Error:
+    Context: Compiling definition at MutualDataImported.hs:9:1-4: code
+    Error: Error from the PIR compiler:
+           Unsupported construct: Mutually recursive datatypes: Forest, Tree ({ ./MutualDataHelper.hs:5:1-5:36 })
+  |
+9 | code = $$(PlutusTx.compile [|| leaf ||])
+  | ^^^^

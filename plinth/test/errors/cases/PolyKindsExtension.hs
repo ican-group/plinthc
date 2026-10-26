@@ -1,6 +1,8 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE PolyKinds #-}
--- Unsupported construct: the PolyKinds language extension.
+-- EXPECT: ok-gate
+-- The PolyKinds language extension: the Plinth check accepts the code
+-- (identity is not poly-kinded); the plugin alone rejects the extension.
 module PolyKindsExtension where
 
 import PlutusTx

@@ -1,10 +1,9 @@
 
-Existential.hs:11:1: error: [PLINTH-00004]
-    Plinth Compilation Error:
-    Context: Compiling definition at Existential.hs:11:1-5: Existential.mkBox
-    Context: Compiling type: GHC.Num.Integer.Integer -> Existential.Box
-    Context: Compiling type: Existential.Box
-    Error: Unsupported feature: Existential quantification in data constructor Existential.Box
+Existential.hs:11:1: error: [PLINTH-00008]
+    This code is not valid Plinth:
+      Existential.mkBox (Existential.hs:11:1-5) uses
+      Existential.Box
+    Unsupported feature: existential or GADT constructor, use a plain algebraic data type
    |
 11 | mkBox = Box
-   | ^^^^^
+   | ^^^^^^^^^^^

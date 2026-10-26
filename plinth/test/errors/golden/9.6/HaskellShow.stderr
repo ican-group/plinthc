@@ -1,9 +1,16 @@
 
-HaskellShow.hs:9:10: error: [PLINTH-00004]
-    Plinth Compilation Error:
-    Context: Compiling code at HaskellShow.hs:9:10-61:
-             GHC.Show.$fShowInteger_$cshow
-    Error: Unsupported feature: GHC.Show.Show.show, use PlutusTx.Show.Show
+HaskellShow.hs:9:10: error: [PLINTH-00008]
+    This code is not valid Plinth:
+      GHC.Show.Show
+    Unsupported feature: GHC.Show.Show, use PlutusTx.Show.Show
+  |
+9 | code = $$(PlutusTx.compile [|| \x -> show (x :: Integer) ||])
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+HaskellShow.hs:9:10: error: [PLINTH-00008]
+    This code is not valid Plinth:
+      GHC.Types.Char
+    Unsupported feature: Char, use BuiltinString or BuiltinByteString
   |
 9 | code = $$(PlutusTx.compile [|| \x -> show (x :: Integer) ||])
   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

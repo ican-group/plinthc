@@ -1,0 +1,9 @@
+
+MutualDataImported.hs:9:10: error: [PLINTH-00008]
+    This code is not valid Plinth:
+      MutualDataHelper.leaf (main, MutualDataHelper.hs:8:1-4) uses
+      MutualDataHelper.Tree
+    Unsupported feature: mutually recursive data types, merge the types or break the cycle
+  |
+9 | code = $$(PlutusTx.compile [|| leaf ||])
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

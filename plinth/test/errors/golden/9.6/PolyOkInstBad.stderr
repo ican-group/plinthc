@@ -1,0 +1,9 @@
+
+PolyOkInstBad.hs:10:10: error: [PLINTH-00008]
+    This code is not valid Plinth:
+      SizeClassHelper.$fSizeBag (main, SizeClassHelper.hs:12:10-17) uses
+      SizeClassHelper.$csize
+    Unsupported feature: the representation of Integer, use the Integer operations of PlutusTx.Prelude
+   |
+10 | code = $$(PlutusTx.compile [|| twiceSize ||])
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

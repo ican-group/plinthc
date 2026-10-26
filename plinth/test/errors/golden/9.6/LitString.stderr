@@ -1,11 +1,7 @@
 
-LitString.hs:9:10: error: [PLINTH-00004]
-    Plinth Compilation Error:
-    Context: Compiling code at LitString.hs:9:10-43:
-             GHC.CString.unpackCString# "hello"#
-    Context: Compiling code:
-             "hello"#
-    Error: Unsupported feature: Literal string (maybe you need to use OverloadedStrings)
+LitString.hs:9:10: error: [PLINTH-00008]
+    This code is not valid Plinth: string literal
+      use OverloadedStrings with BuiltinString or BuiltinByteString
   |
 9 | code = $$(PlutusTx.compile [|| "hello" ||])
   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

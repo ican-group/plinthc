@@ -10,13 +10,26 @@
 # Context frames and some module names (GHC.Internal.* since GHC 9.10)
 # depend on the GHC version.
 #
+# A case whose first lines contain "-- EXPECT: ok" must compile without
+# any diagnostic: it pins down what the Plinth check must accept.
+# "-- EXPECT: ok-gate" must compile in gate mode only.
+#
+# The suite runs in two modes:
+#   gate    (default) the Plinth check of the type checker rejects the
+#           code; goldens in golden/<series>/;
+#   nogate  -fno-plinth-gate: the plugin's Core to PIR compile rejects
+#           the code; goldens in golden/<series>/nogate/. This is the
+#           fallback path (defer-errors) and its messages must stay useful.
+# MODES="gate" restricts the run.
+#
 # The plutus-tx-plugin golden tests only cover the defer-errors path,
 # which drops the source location and the source snippet. These tests
-# capture the real user-facing output (the "Plinth Compilation Error:"
-# message printed by plinthc), so changes to error reporting and to
-# source-location tracking show up as golden diffs here.
+# capture the real user-facing output, so changes to error reporting and
+# to source-location tracking show up as golden diffs here.
 #
-# Files named *Helper.hs are companion modules, not test cases.
+# Files named *Helper.hs are companion modules, not test cases. Modules
+# in cases/prebuilt/ are compiled first, with -fno-plinth-status, to
+# stand for a library built without the Plinth check.
 #
 # Usage:
 #   GHC=/path/to/plinthc ./run-error-tests.sh          # run tests
@@ -32,6 +45,7 @@ TEST_ROOT=$(cd "$HERE/.." && pwd)
 
 : ${GHC:=$TEST_ROOT/../../ghc/_build/stage1/bin/plinthc}
 : ${ACCEPT:=0}
+: ${MODES:="gate nogate"}
 
 if [ ! -x "$GHC" ]; then
   echo "error: plinthc not found ($GHC). Run plinthc-build.sh first," >&2
@@ -73,6 +87,7 @@ GHC_ARGS=(
   -package-db "$INPLACE_DB"
   -hide-all-packages
   -package base
+  -package containers
   -package-id "$PLUTUS_TX_ID"
   -package text
   -package bytestring
@@ -108,46 +123,104 @@ failures=0
 total=0
 
 cd "$HERE/cases"
-for case_file in *.hs; do
-  case "$case_file" in
-    *Helper.hs) continue ;;
+
+# The prebuilt modules: compiled without the Plinth check, so their
+# bindings carry no status. They are found through the search path.
+PREBUILT="$OUTDIR/prebuilt"
+PREBUILT_MODULES=""
+mkdir -p "$PREBUILT"
+if ls prebuilt/*.hs >/dev/null 2>&1; then
+  for helper in prebuilt/*.hs; do
+    PREBUILT_MODULES="$PREBUILT_MODULES $(basename "$helper" .hs)"
+    if ! out=$("$GHC" -c "${GHC_ARGS[@]}" -fno-plinth-status \
+                 -outputdir "$PREBUILT" "$helper" 2>&1); then
+      echo "error: cannot compile $helper:" >&2
+      echo "$out" >&2
+      exit 2
+    fi
+  done
+fi
+
+run_case () {
+  local mode=$1 case_file=$2
+  local name=${case_file%.hs}
+  local golden expect mode_args actual_raw rc actual diff_out label
+  case "$mode" in
+    gate)   golden="$GOLDEN_DIR/$name.stderr"; mode_args=(); label="$name" ;;
+    nogate) golden="$GOLDEN_DIR/nogate/$name.stderr"; mode_args=(-fno-plinth-gate)
+            label="$name (nogate)" ;;
   esac
-  name=${case_file%.hs}
-  golden="$GOLDEN_DIR/$name.stderr"
+  # "-- EXPECT: ok": must compile in both modes; "-- EXPECT: ok-gate":
+  # must compile in gate mode and fail in nogate mode (the plugin alone
+  # rejects a module-wide construct, the check looks at each declaration).
+  if head -5 "$case_file" | grep -q -- "-- EXPECT: ok-gate"; then
+    if [ "$mode" = gate ]; then expect=ok; else expect=fail; fi
+  elif head -5 "$case_file" | grep -q -- "-- EXPECT: ok"; then
+    expect=ok
+  else
+    expect=fail
+  fi
   total=$((total + 1))
 
-  actual_raw=$("$GHC" --make "${GHC_ARGS[@]}" -outputdir "$OUTDIR/$name" \
+  # A case that imports a prebuilt module compiles in one-shot mode (-c):
+  # --make looks for sources only, -c finds the .hi in the search path.
+  local ghc_mode=(--make) helper
+  for helper in $PREBUILT_MODULES; do
+    if grep -q "^import $helper\b" "$case_file"; then ghc_mode=(-c); fi
+  done
+  actual_raw=$("$GHC" "${ghc_mode[@]}" "${GHC_ARGS[@]}" "${mode_args[@]}" \
+                 -i"$PREBUILT" -outputdir "$OUTDIR/$mode/$name" \
                  "$case_file" 2>&1)
   rc=$?
-
-  if [ $rc -eq 0 ]; then
-    echo "FAIL $name: expected the compilation to fail, but it succeeded"
-    failures=$((failures + 1))
-    continue
-  fi
-
   actual=$(printf '%s\n' "$actual_raw" | normalize)
 
+  if [ "$expect" = ok ]; then
+    # Must compile, with no diagnostic at all.
+    if [ $rc -ne 0 ] || [ -n "$(printf '%s' "$actual" | tr -d '[:space:]')" ]; then
+      echo "FAIL $label: expected the compilation to succeed silently"
+      printf '%s\n' "$actual" | sed 's/^/    /'
+      failures=$((failures + 1))
+    else
+      echo "ok   $label"
+    fi
+    return
+  fi
+
+  if [ $rc -eq 0 ]; then
+    echo "FAIL $label: expected the compilation to fail, but it succeeded"
+    failures=$((failures + 1))
+    return
+  fi
+
   if [ "$ACCEPT" -eq 1 ]; then
-    mkdir -p "$GOLDEN_DIR"
+    mkdir -p "$(dirname "$golden")"
     printf '%s\n' "$actual" > "$golden"
-    echo "ACCEPT $name"
-    continue
+    echo "ACCEPT $label"
+    return
   fi
 
   if [ ! -f "$golden" ]; then
-    echo "FAIL $name: golden file missing ($golden); run with ACCEPT=1"
+    echo "FAIL $label: golden file missing ($golden); run with ACCEPT=1"
     failures=$((failures + 1))
-    continue
+    return
   fi
 
   if ! diff_out=$(printf '%s\n' "$actual" | diff -u "$golden" - 2>&1); then
-    echo "FAIL $name: output differs from golden"
+    echo "FAIL $label: output differs from golden"
     echo "$diff_out" | sed 's/^/    /'
     failures=$((failures + 1))
   else
-    echo "ok   $name"
+    echo "ok   $label"
   fi
+}
+
+for mode in $MODES; do
+  for case_file in *.hs; do
+    case "$case_file" in
+      *Helper.hs) continue ;;
+    esac
+    run_case "$mode" "$case_file"
+  done
 done
 
 echo ""

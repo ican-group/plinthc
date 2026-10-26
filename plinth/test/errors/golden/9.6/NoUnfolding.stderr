@@ -1,11 +1,10 @@
 
-NoUnfolding.hs:10:10: error: [PLINTH-00005]
-    Plinth Compilation Error:
-    Context: Compiling code at NoUnfolding.hs:10:10-45:
-             NoUnfoldingHelper.opaque
-    Error: Reference to a name which is not a local, a builtin, or an external function with an available definition: Variable NoUnfoldingHelper.opaque
-           No unfolding
-           The definition of ‘NoUnfoldingHelper.opaque’ is not available. Remove its NOINLINE or OPAQUE pragma.
+NoUnfolding.hs:10:10: error: [PLINTH-00008]
+    This code is not valid Plinth:
+      NoUnfoldingHelper.opaque (main, NoUnfoldingHelper.hs:6:1-6) uses
+      GHC.Num.Integer.integerAdd (ghc-bignum-1.3) which uses
+      the representation of Integer
+    Unsupported feature: the representation of Integer, use the Integer operations of PlutusTx.Prelude
    |
 10 | code = $$(PlutusTx.compile [|| opaque 42 ||])
    |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

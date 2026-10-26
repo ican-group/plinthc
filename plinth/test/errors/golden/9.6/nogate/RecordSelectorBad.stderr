@@ -1,0 +1,16 @@
+
+RecordSelectorBad.hs:8:42: error: [PLINTH-00004]
+    Plinth Compilation Error:
+    Context: Compiling definition at RecordSelectorBad.hs:8:42-48: RecordSelectorBad.balance
+    Context: Compiling type: RecordSelectorBad.Account
+                             -> GHC.Num.Integer.Integer
+    Context: Compiling type: RecordSelectorBad.Account
+    Context: Compiling data constructor type: RecordSelectorBad.Account
+    Context: Compiling type: GHC.Base.String
+    Context: Compiling type: GHC.Types.Char
+    Context: Compiling data constructor type: GHC.Types.C#
+    Context: Compiling type: GHC.Prim.Char#
+    Error: Unsupported feature: Type constructor: GHC.Prim.Char#
+  |
+8 | data Account = Account { name :: String, balance :: Integer }
+  |                                          ^^^^^^^
