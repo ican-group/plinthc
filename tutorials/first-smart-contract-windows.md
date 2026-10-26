@@ -66,8 +66,8 @@ details). Add the plinthc release channel, then install and activate the tool:
 
 ```console
 > ghcup config add-release-channel https://raw.githubusercontent.com/ican-group/plinthc/ghcup-channel/ghcup-plinthc.yaml
-> ghcup install plinthc 9.6.170.1
-> ghcup set plinthc 9.6.170.1
+> ghcup install plinthc 9.12.170.1
+> ghcup set plinthc 9.12.170.1
 ```
 
 Check that the compiler is on `PATH`:
@@ -76,7 +76,7 @@ Check that the compiler is on `PATH`:
 > plinthc --version
 ```
 
-If you have already installed 9.6.170.1 this way, skip to step 2.
+If you have already installed 9.12.170.1 this way, skip to step 2.
 
 ## Step 2: Create the project
 
@@ -84,7 +84,7 @@ Make a new directory and add the three files below. They are identical to the
 Linux/macOS tutorial's files.
 
 **`cabal.project`** wires up the build. It points cabal at `plinthc`
-9.6.170.1 and its `ghc-pkg` (installed by ghcup as `plinthc-pkg-9.6.170.1`,
+9.12.170.1 and its `ghc-pkg` (installed by ghcup as `plinthc-pkg-9.12.170.1`,
 so that it does not collide with your regular GHC); pulls the
 Plinth libraries (`plutus-tx`, `plutus-core`) from the
 `ghc-plinth-plutus` fork the compiler was built against; uses the Cardano
@@ -99,8 +99,8 @@ The `with-hc-pkg` line is essential on Windows: without it, cabal picks up the
 ```haskell
 -- The plinthc release. The ghc-plinth-plutus tag below must be the commit
 -- that this release is built from.
-with-compiler: plinthc-9.6.170.1
-with-hc-pkg:   plinthc-pkg-9.6.170.1
+with-compiler: plinthc-9.12.170.1
+with-hc-pkg:   plinthc-pkg-9.12.170.1
 
 packages: .
 
@@ -124,7 +124,7 @@ index-state:
 source-repository-package
   type: git
   location: https://github.com/ican-group/ghc-plinth-plutus
-  tag: 1a74ed2d09f333ac516a0e49328cd62053ff4c9d
+  tag: 01c6883c4c9aa503793db8041a8d74252bf951e5
   subdir: plutus-tx
           plutus-core
 
@@ -167,7 +167,7 @@ package sodium-clib
 
 Use the `ghc-plinth-plutus` commit that matches your `plinthc`: the compiler and
 these libraries are released together as a matched set, built from the same
-commit. The commit above matches release 9.6.170.1, the release in
+commit. The commit above matches release 9.12.170.1, the release in
 `with-compiler`. To use a different release, change `with-compiler`,
 `with-hc-pkg` and this `tag` together. The commit of a release is the `plutus`
 submodule of its tag (`v<version>`) in

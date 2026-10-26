@@ -22,7 +22,8 @@ The [plinthc repository](https://github.com/ican-group/plinthc) holds the build
 scripts, the tests and the examples. The compiler sources are two forks, each an
 upstream release plus a small set of patches: GHC
 ([`ican-group/ghc-plinth`](https://github.com/ican-group/ghc-plinth), branch
-`plinthc-9.6.7`) and plutus
+`plinthc-9.12.4` for the recommended GHC 9.12-based compiler, and
+`plinthc-9.6.7` for the GHC 9.6-based one) and plutus
 ([`ican-group/ghc-plinth-plutus`](https://github.com/ican-group/ghc-plinth-plutus),
 branch `plinthc-1.70`), which supplies `plutus-tx`, `plutus-tx-plugin` and
 `plutus-core`.

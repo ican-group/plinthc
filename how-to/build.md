@@ -29,16 +29,17 @@ found, so they are effectively optional. The others must be present.
 
 ## 1. Clone with submodules
 
-The compiler sources come from two submodules, so clone recursively:
+The compiler sources come from two submodules, so clone recursively. The
+branch of the plinthc repository selects the GHC version: `ghc-9.12` builds
+the recommended GHC 9.12-based compiler, `master` the GHC 9.6-based one.
 
-| Submodule | Repository                     | Branch          | Provides                                               |
-| --------- | ------------------------------ | --------------- | ------------------------------------------------------ |
-| `ghc`     | `ican-group/ghc-plinth`        | `plinthc-9.6.7` | GHC 9.6.7 with the plinthc patches                     |
-| `plutus`  | `ican-group/ghc-plinth-plutus` | `plinthc-1.70`  | `plutus-tx`, `plutus-tx-plugin` and `plutus-core` 1.70 |
-
+| Submodule | Repository                     | Branch                                       | Provides                                               |
+| --------- | ------------------------------ | -------------------------------------------- | ------------------------------------------------------ |
+| `ghc`     | `ican-group/ghc-plinth`        | `plinthc-9.12.4` (or `plinthc-9.6.7`)        | GHC 9.12.4 (or 9.6.7) with the plinthc patches         |
+| `plutus`  | `ican-group/ghc-plinth-plutus` | `plinthc-1.70`                               | `plutus-tx`, `plutus-tx-plugin` and `plutus-core` 1.70 |
 
 ```console
-$ git clone --recurse-submodules git@github.com:ican-group/plinthc.git
+$ git clone --recurse-submodules -b ghc-9.12 git@github.com:ican-group/plinthc.git
 ```
 
 If you already cloned without `--recurse-submodules`, fetch them with:
