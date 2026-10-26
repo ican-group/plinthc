@@ -1,0 +1,80 @@
+name: Retry network failures
+
+# Note [Retrying network failures]
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# The builds download a lot: GHC submodules, Hackage and CHaP packages,
+# source-repository-packages from GitHub, ghcup. Now and then a download fails
+# for reasons outside our control (DNS failures, HTTP 403/429/5xx from Hackage
+# or GitHub, connection resets), and a whole matrix run that took hours fails
+# with it.
+#
+# When a CI or Tutorials run fails, this workflow looks at the end of the log
+# of each failed job. If every failed job failed on a network error, it reruns
+# the failed jobs (and the jobs that depend on them, e.g. the tests and the
+# release of a release run). If any failed job failed for another reason, it
+# does nothing: a real failure must stay visible.
+#
+# It retries once. A rerun started with GITHUB_TOKEN does not trigger
+# workflow_run again when it completes, so this cannot loop; the
+# run_attempt check makes that explicit.
+#
+# workflow_run workflows run from the default branch, for runs on any branch.
+
+on:
+  workflow_run:
+    workflows: [CI, Tutorials]
+    types: [completed]
+
+permissions:
+  actions: write
+
+jobs:
+  retry:
+    if: >-
+      github.event.workflow_run.conclusion == 'failure' &&
+      github.event.workflow_run.run_attempt == 1
+    runs-on: ubuntu-latest
+    steps:
+    - name: Rerun the failed jobs if they all failed on the network
+      env:
+        GH_TOKEN: ${{ github.token }}
+        REPO: ${{ github.repository }}
+        RUN_ID: ${{ github.event.workflow_run.id }}
+        ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+      run: |
+        set -euo pipefail
+        # Error messages of failed downloads, from git, curl, cabal and ghcup.
+        network='Could not resolve host|Temporary failure in name resolution'
+        network+='|Connection (reset by peer|timed out|refused)|Operation timed out'
+        network+='|TLS handshake timeout|SSL_ERROR_SYSCALL|Failed to connect to'
+        network+='|returned error: (403|429|5[0-9][0-9])'
+        network+='|Unexpected response (403|429|5[0-9][0-9])|HTTP (429|5[0-9][0-9])'
+        network+='|The remote end hung up unexpectedly|early EOF'
+
+        failed=$(gh api --paginate "repos/$REPO/actions/runs/$RUN_ID/attempts/$ATTEMPT/jobs" \
+                   -q '.jobs[] | select(.conclusion == "failure") | "\(.id)\t\(.name)"')
+        if [ -z "$failed" ]; then
+          echo "no failed jobs"
+          exit 0
+        fi
+
+        all_network=1
+        while IFS=$'\t' read -r id name; do
+          # Only the end of the log: an early, retried download error must
+          # not count for a job that failed later for another reason.
+          if curl -sSfL -H "Authorization: Bearer $GH_TOKEN" \
+               "https://api.github.com/repos/$REPO/actions/jobs/$id/logs" \
+             | tail -n 300 | grep -E -q "$network"; then
+            echo "network failure: $name"
+          else
+            echo "not a network failure: $name"
+            all_network=0
+          fi
+        done <<< "$failed"
+
+        if [ "$all_network" -eq 1 ]; then
+          echo "rerunning the failed jobs of run $RUN_ID"
+          gh run rerun "$RUN_ID" --failed -R "$REPO"
+        else
+          echo "at least one job failed for another reason: not rerunning"
+        fi
