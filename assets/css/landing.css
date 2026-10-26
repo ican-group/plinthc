@@ -15,10 +15,14 @@
 .landing__actions .button { margin: .25rem; }
 .landing__actions .button svg { vertical-align: -.15em; margin-right: .3em; fill: currentColor; }
 
-/* The code sample: left-aligned text in a centred box. */
-.landing__sample { max-width: 40rem; margin: 0 auto; text-align: left; }
-.landing__sample .highlight pre { margin: 0; overflow-x: auto; }
-.landing__caption { margin: .75rem 0 0; font-size: .85rem; color: #888; }
+/* The code sample: left-aligned text in a centred box as wide as its longest
+   line, so that no line needs a scrollbar. On a screen too narrow for that,
+   the long lines wrap instead. */
+.landing__sample { width: fit-content; max-width: 100%; margin: 0 auto; text-align: left; }
+.landing__sample .highlight pre { margin: 0; padding: .75rem 1rem; border-radius: .4rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+/* width 0 + min-width 100%: the caption takes the width of the code and does
+   not widen the box. */
+.landing__caption { width: 0; min-width: 100%; margin: .75rem 0 0; font-size: .85rem; color: #888; }
 
 /* Cards: a white tile on the grey band, a plain cell on the white band. */
 .landing__card { height: 100%; padding: 1rem 1.25rem; text-align: left; }
