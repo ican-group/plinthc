@@ -152,3 +152,17 @@ ledger runs it.
 The uplc-ghc releases 9.6.169.1 and 9.6.169.2, the predecessors of plinthc,
 compile for protocol version 12, so their scripts that decode data types fail
 on mainnet.
+
+## Errors in on-chain code
+
+The compiler checks every `$$(PlutusTx.compile [|| ... ||])` splice at
+type-checking time and rejects code that is not valid Plinth with a
+`[PLINTH-00008]` error that names the chain of definitions down to the
+unsupported feature. The check needs every dependency to be built with the
+Plinth compiler, which the `with-compiler` line above guarantees. To defer
+such errors to run time instead, for example in a test-suite that checks the
+error path, give the module the plugin option
+`{-# OPTIONS_GHC -fplugin-opt Plinth.Plugin:defer-errors #-}`; it also turns
+the check off for that module. See
+[Compiler flags]({% link reference/compiler-flags.md %}) and
+[Differences from Haskell]({% link explanation/differences-from-haskell.md %}).

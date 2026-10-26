@@ -33,11 +33,61 @@ differently from Haskell:
 Keep the re-evaluation in mind: a non-strict binding used three times costs
 its evaluation three times of the script budget.
 
+## How the compiler checks on-chain code
+
+The compiler decides at type-checking time whether code is valid Plinth. If a
+module type-checks, its on-chain code compiles to UPLC: no later pass, and no
+optimisation setting, can change that verdict.
+
+Every top-level binding of every module the compiler builds &mdash; your own
+modules, the Plinth libraries, `base`, every dependency &mdash; gets a *Plinth
+status* stored in its interface file: valid Plinth, or not valid with the
+reason. A binding is valid when its body uses only supported features, types
+and constructors, and only bindings that are valid themselves. A polymorphic
+binding is valid at its definition: the dictionaries it receives are checked
+where it is used, because that is where they are known. A type is never valid
+or invalid by itself, so a datatype that derives `Show` for your tests is fine
+on chain as long as `show` is not called there.
+
+Nothing marks on-chain code. The check fires where a splice
+`$$(PlutusTx.compile [|| ... ||])` is type-checked: every binding the spliced
+code reaches must be valid. When one is not, the error shows the chain of
+definitions from the splice to the unsupported feature, with the location of
+each definition:
+
+```
+Auction.hs:14:5: error: [PLINTH-00008]
+    This code is not valid Plinth:
+      Auction.lockTyped (Auction.hs:14:1) uses
+      Data.Map.Internal.insert (containers-0.6.7, Data/Map/Internal.hs:412:1) which uses
+      GHC.Types.Int
+    Unsupported feature: Int, use Integer instead
+```
+
+The error points at the offending expression when it is in the module being
+compiled, and at the splice otherwise. All the invalid dependencies of a splice
+are reported in one compilation. Because the check runs in the type checker,
+an IDE that type-checks the module shows the errors too.
+
+A binding whose definition the compiler cannot see is not valid either: a
+function with a `NOINLINE` or `OPAQUE` pragma, a module compiled with
+`-fomit-interface-pragmas`, or a library built with a compiler that does not
+compute the status (a stock GHC). Build everything with the Plinth compiler.
+
+The check accepts the compiler primitives (the builtins of
+`PlutusTx.Builtins.Internal`, `PlutusTx.Function.fix`, the lazy `&&` and
+`||`, ...) whatever their Haskell body: the compiler maps them to UPLC
+directly.
+
+`-fno-plinth-gate` turns the check off for a module and leaves the rejection
+to the Core to PIR compile, the path described next. The plugin option
+`defer-errors` does the same. See [Compiler flags]({% link reference/compiler-flags.md %}).
+
 ## How the compiler reports an unsupported feature
 
-The Plinth compiler runs after GHC's type checker, so these errors appear when
-the module is compiled, not in an IDE that only type-checks. An error carries a
-source location, a `PLINTH` error code, the reason, and usually a suggestion:
+With the check off, the Plinth compiler proper reports the error when it
+translates the code, after GHC's type checker. The error carries a source
+location, a `PLINTH` error code, the reason, and usually a suggestion:
 
 ```
 Auction.hs:9:10: error: [PLINTH-00004]
@@ -55,6 +105,10 @@ innermost last. They show GHC Core &mdash; the intermediate language the
 compiler consumes &mdash; so the code can look different from the source
 (`==` above appears as `integerEq`, the function GHC resolved it to).
 
+With the check on, this path is only reached by code the check accepted. A
+failure there is then a compiler bug, reported as `PLINTH-00009` with a
+request to report it.
+
 The error codes are:
 
 | Code           | Meaning                                              |
@@ -66,6 +120,8 @@ The error codes are:
 | `PLINTH-00005` | Reference to a name without an accessible definition |
 | `PLINTH-00006` | Misused compiler marker                              |
 | `PLINTH-00007` | Internal name lookup error; please report it         |
+| `PLINTH-00008` | The code is not valid Plinth: the message shows the chain of definitions to the unsupported feature |
+| `PLINTH-00009` | The Plinth check accepted the code but the compiler failed to translate it; please report it |
 
 The plugin option `-fplugin-opt Plinth.Plugin:preserve-source-locations` makes
 locations more precise: the compiler then tracks the locations of variables,
@@ -247,19 +303,25 @@ Error: Unsupported feature: Following extensions are not supported: PolyKinds
 
 On-chain kinds are `*` and arrow kinds only; there are no kind variables.
 
-### Functions without unfoldings
+### Functions without a definition
 
 ```
-Error: Reference to a name which is not a local, a builtin, or an external function with an available definition: Variable Auction.opaque
-       No unfolding
-       The definition of ‘Auction.opaque’ is not available. Remove its NOINLINE or OPAQUE pragma.
+Auction.hs:12:11: error: [PLINTH-00008]
+    This code is not valid Plinth:
+      Auction.lockTyped (Auction.hs:12:1-9) uses
+      Auction.opaque (Auction.hs:8:1-6)
+    Unsupported feature: no unfolding, remove its NOINLINE or OPAQUE pragma, or -fomit-interface-pragmas from its module
 ```
 
 The compiler translates the GHC Core definition (the "unfolding") of every
 function the compiled code references. plinthc keeps the unfoldings of all
-definitions without `INLINEABLE` pragmas, except when a `NOINLINE` or `OPAQUE`
-pragma hides the definition &mdash; see
+definitions without `INLINEABLE` pragmas &mdash; see
 [Unfoldings and `INLINEABLE`]({% link explanation/plinth-language.md %}#unfoldings-and-inlineable).
+Three things still hide a definition: a `NOINLINE` or `OPAQUE` pragma on the
+function, `-fomit-interface-pragmas` on its module, and a library built with a
+compiler that does not compute the Plinth status (a stock GHC): its bindings
+have no status and the check reports them as `built without the Plinth
+checker`.
 
 ## Further reading
 
