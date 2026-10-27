@@ -1,0 +1,32 @@
+IntegerConstructorMatch.hs:12:1: error: [PLINTH-00004]
+    Plinth Compilation Error:
+    Context: Compiling definition at IntegerConstructorMatch.hs:12:1-7: IntegerConstructorMatch.isSmall
+    Context: Compiling code:
+             \ (ds :: GHC.Num.Integer.Integer) ->
+               case ds of {
+                 __DEFAULT -> GHC.Types.False;
+                 GHC.Num.Integer.IS _ -> GHC.Types.True
+               }
+    Context: Compiling code:
+             case ds of {
+               __DEFAULT -> GHC.Types.False;
+               GHC.Num.Integer.IS _ -> GHC.Types.True
+             }
+    Context: Creating instantiated matcher for type: GHC.Num.Integer.Integer
+    Error: Unsupported feature: Cannot pattern match on a value of type 'Integer'.
+    
+           This happens when the code, or a function from a GHC library that it
+           uses, matches on the internal constructors of 'Integer' (IS, IP, IN).
+           Plinth compiles 'Integer' to the builtin integer type, which has no
+           constructors. Patterns on integer literals are supported:
+    
+             f 42 = ...
+             f n  = ...
+    
+           Use the functions from 'PlutusTx.Prelude' on 'Integer', for example
+           (==), compare, or divide.
+    
+           Note: GHC can generate these unexpectedly, you may need '-fno-strictness', '-fno-specialise', '-fno-spec-constr', '-fno-unbox-strict-fields', or '-fno-unbox-small-strict-fields'.
+   |
+12 | isSmall (IS _) = True
+   | ^^^^^^^

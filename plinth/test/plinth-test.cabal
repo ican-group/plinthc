@@ -63,6 +63,7 @@ library plinth-validators
     AuctionMintingPolicy
     AuctionValidator
     Examples
+    IntegerPatterns
     NoPragmas
     NoPragmasO0
     Utils
@@ -109,6 +110,17 @@ test-suite no-pragmas
   import:         plinth-options, plutus-deps
   type:           exitcode-stdio-1.0
   hs-source-dirs: no-pragmas
+  main-is:        Main.hs
+  build-depends:
+    , base
+    , plinth-validators
+
+-- Plinth code with patterns on Integer literals.
+-- See Note [Integer literal patterns] in integer-patterns/Main.hs.
+test-suite integer-patterns
+  import:         plinth-options, plutus-deps
+  type:           exitcode-stdio-1.0
+  hs-source-dirs: integer-patterns
   main-is:        Main.hs
   build-depends:
     , base

@@ -123,9 +123,11 @@ CABAL_BUILD_ARGS="\
     cabal ${CABAL_PROJECT_ARGS} ${CABAL_ARGS} build ${CABAL_BUILD_ARGS} .
     cabal ${CABAL_PROJECT_ARGS} ${CABAL_ARGS} run ${CABAL_BUILD_ARGS} gen-examples
 
-    # See Note [No INLINABLE pragmas] in plinth/test/no-pragmas/Main.hs.
+    # See Note [No INLINABLE pragmas] in plinth/test/no-pragmas/Main.hs and
+    # Note [Integer literal patterns] in plinth/test/integer-patterns/Main.hs.
     cabal ${CABAL_PROJECT_ARGS} ${CABAL_ARGS} test ${CABAL_BUILD_ARGS} \
-        --test-show-details=direct plinth-test:test:no-pragmas
+        --test-show-details=direct plinth-test:test:no-pragmas \
+        plinth-test:test:integer-patterns
 
     # Golden tests for the user-facing compile-time error messages.
     # See Note [Error message golden tests] in
