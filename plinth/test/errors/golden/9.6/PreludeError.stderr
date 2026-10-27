@@ -1,9 +1,21 @@
 
-PreludeError.hs:9:10: error: [PLINTH-00004]
-    Plinth Compilation Error:
-    Context: Compiling code at PreludeError.hs:9:10-48:
-             GHC.Err.error
-    Error: Unsupported feature: GHC.Err.error, use PlutusTx.Prelude.error or PlutusTx.Prelude.traceError
+PreludeError.hs:9:10: error: [PLINTH-00008]
+    This code is not valid Plinth: string literal
+      use OverloadedStrings with BuiltinString or BuiltinByteString
+  |
+9 | code = $$(PlutusTx.compile [|| error "boom" ||])
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+PreludeError.hs:9:10: error: [PLINTH-00008]
+    This code is not valid Plinth: GHC.Err.error
+      use PlutusTx.Prelude.error or PlutusTx.Prelude.traceError
+  |
+9 | code = $$(PlutusTx.compile [|| error "boom" ||])
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+PreludeError.hs:9:10: error: [PLINTH-00008]
+    This code is not valid Plinth: implicit parameter
+      pass the value as an argument
   |
 9 | code = $$(PlutusTx.compile [|| error "boom" ||])
   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

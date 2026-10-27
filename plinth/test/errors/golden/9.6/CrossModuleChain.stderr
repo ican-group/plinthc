@@ -1,0 +1,10 @@
+
+CrossModuleChain.hs:11:10: error: [PLINTH-00008]
+    This code is not valid Plinth:
+      ChainMiddleHelper.countTwice (main, ChainMiddleHelper.hs:8:1-10) uses
+      ChainInnerHelper.count (main, ChainInnerHelper.hs:6:1-5) which uses
+      GHC.Types.Int
+    Unsupported feature: Int, use Integer instead
+   |
+11 | code = $$(PlutusTx.compile [|| countTwice ||])
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -1,0 +1,10 @@
+
+SameModuleChain.hs:11:12: error: [PLINTH-00008]
+    This code is not valid Plinth:
+      SameModuleChain.outer (SameModuleChain.hs:14:1-5) uses
+      SameModuleChain.inner (SameModuleChain.hs:11:1-5) which uses
+      GHC.Types.Int
+    Unsupported feature: Int, use Integer instead
+   |
+11 | inner xs = fromIntegral (length xs)
+   |            ^^^^^^^^^^^^

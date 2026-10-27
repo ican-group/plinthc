@@ -1,0 +1,15 @@
+
+LibraryChain.hs:10:1: error: [PLINTH-00004]
+    Plinth Compilation Error:
+    Context: Compiling definition at LibraryChain.hs:10:1-6: LibraryChain.single
+    Context: Compiling type: GHC.Num.Integer.Integer
+                             -> Data.Map.Internal.Map
+                                  GHC.Num.Integer.Integer GHC.Num.Integer.Integer
+    Context: Compiling type: Data.Map.Internal.Map
+                               GHC.Num.Integer.Integer GHC.Num.Integer.Integer
+    Context: Compiling data constructor type: Data.Map.Internal.Bin
+    Context: Compiling type: GHC.Prim.Int#
+    Error: Unsupported feature: Int#: unboxed integers are not supported
+   |
+10 | single k = Map.insert k k Map.empty
+   | ^^^^^^

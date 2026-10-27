@@ -1,0 +1,11 @@
+
+SameModuleChain.hs:11:12: error: [PLINTH-00004]
+    Plinth Compilation Error:
+    Context: Compiling code at SameModuleChain.hs:11:12-23:
+             \ (eta :: GHC.Types.Int) ->
+               case eta of { GHC.Types.I# i -> GHC.Num.Integer.IS i }
+    Context: Compiling type: GHC.Types.Int
+    Error: Unsupported feature: Int: use Integer instead
+   |
+11 | inner xs = fromIntegral (length xs)
+   |            ^^^^^^^^^^^^

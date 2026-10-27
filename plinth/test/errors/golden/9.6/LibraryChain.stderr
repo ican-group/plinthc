@@ -1,0 +1,9 @@
+
+LibraryChain.hs:10:1: error: [PLINTH-00008]
+    This code is not valid Plinth:
+      LibraryChain.single (LibraryChain.hs:10:1-6) uses
+      GHC.Types.Int
+    Unsupported feature: Int, use Integer instead
+   |
+10 | single k = Map.insert k k Map.empty
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

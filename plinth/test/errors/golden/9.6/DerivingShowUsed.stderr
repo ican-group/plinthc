@@ -1,0 +1,8 @@
+
+DerivingShowUsed.hs:14:37: error: [PLINTH-00008]
+    This code is not valid Plinth:
+      DerivingShowUsed.describe (DerivingShowUsed.hs:14:1-8)
+    Unsupported feature: GHC.Show.Show, use PlutusTx.Show.Show
+   |
+14 | describe p = stringToBuiltinString (show p)
+   |                                     ^^^^

@@ -15,7 +15,9 @@ DEV_HADRIAN_ARGS="--docs=none"
 # unfoldings of all their definitions, because the Plinth compiler
 # translates them. plinthc does not compile these libraries, so they do
 # not get the INLINABLE pragmas that the Plinth plugin adds.
-RELEASE_FLAVOUR="release+expose_unfoldings"
+# plinth_status: every library gets the Plinth status of its bindings in
+# its interface files (see Note [Plinth status] in GHC.Plinth.Status).
+RELEASE_FLAVOUR="release+expose_unfoldings+plinth_status"
 # Note [Lean CI flavour]
 # ~~~~~~~~~~~~~~~~~~~~~~~
 # The dev/CI flavour is just "release" (+expose_unfoldings, see above):
@@ -25,7 +27,7 @@ RELEASE_FLAVOUR="release+expose_unfoldings"
 #    *and* of every package built with the resulting compiler (i.e. the Plinth
 #    test project). Dropping it keeps CI within its time budget.
 # Use RELEASE=1 for a clean release build (adds docs etc.).
-DEV_FLAVOUR="release+expose_unfoldings"
+DEV_FLAVOUR="release+expose_unfoldings+plinth_status"
 
 # platform-specific default configure arguments
 case "$UNAME_S" in
@@ -41,6 +43,11 @@ DEV_CONFIGURE_ARGS="$DEFAULT_CONFIGURE_ARGS"
 # edit configuration here:
 
 : ${REBUILD:=0} # set to 1 to force rebuild
+# set to 1 to rebuild the stage1 libraries too: hadrian does not rebuild
+# them when only the compiler changed, but the Plinth statuses in their
+# interface files (see Note [Plinth status] in GHC.Plinth.Status) come
+# from the compiler. Implies REBUILD=1. Also wipes the plinthc store.
+: ${REBUILD_LIBS:=0}
 : ${RELEASE:=0} # set to 1 to build release version including documentation (more build dependencies)
 : ${BINDIST:=0} # set to 1 to produce the fixed-up plinthc bindist + archive while keeping the dev (assertions) flavour
 : ${RELEASE_VERSION:=} # set to e.g. 9.6.169.1 to stamp the compiler with exactly that version. See Note [Release versioning]
@@ -197,6 +204,12 @@ fi
 
 # build boot GHC
 DID_BOOT_OR_CONFIGURE=0
+if [ "$REBUILD_LIBS" -eq 1 ]; then
+  REBUILD=1
+  rm -rf ghc/_build/stage1/lib ghc/_build/stage1/libraries ghc/_build/stage1/bin
+  rm -rf _build/stage-plinth/*/store
+fi
+
 if [ ! -x ghc/configure ] || [ "$REBUILD" -eq 1 ] || [ "$GHC_CHANGED" -eq 1 ]; then
   echo "booting..."
   (cd ghc && ./boot)
@@ -244,6 +257,9 @@ if [ ! -x "$GHC_BUILD/stage1/bin/ghc" ] || [ "$REBUILD" -eq 1 ] || [ "$GHC_CHANG
   # See Note [Rebuild when the GHC fork changes]
   mkdir -p "$BASE/_build"
   echo "$GHC_COMMIT" > "$GHC_STAMP"
+  # cabal does not notice a change of the ghc library (same unit id), so
+  # it would keep a stale plinthc: force a fresh build of ghc-bin.
+  HADRIAN_RAN=1
 fi
 
 # build plinthc
@@ -260,6 +276,10 @@ if [ -n "$RELEASE_VERSION" ] && [ "$VERSION" != "$RELEASE_VERSION" ]; then
   echo "error: built compiler reports version $VERSION, expected $RELEASE_VERSION"
   echo "       (stale _build? re-run with REBUILD=1)"
   exit 1
+fi
+
+if [ "${HADRIAN_RAN:-0}" -eq 1 ]; then
+  rm -rf "_build/${STAGE}/${TARGET_PLATFORM}/build"
 fi
 
 CABAL_PROJECT_ARGS="--project-file=cabal.project"

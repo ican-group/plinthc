@@ -1,9 +1,7 @@
 
-HaskellEq.hs:9:10: error: [PLINTH-00004]
-    Plinth Compilation Error:
-    Context: Compiling code at HaskellEq.hs:9:10-62:
-             GHC.Num.Integer.integerEq
-    Error: Unsupported feature: GHC.Classes.Eq.==, use PlutusTx.Eq.Eq
+HaskellEq.hs:9:10: error: [PLINTH-00008]
+    This code is not valid Plinth: GHC.Classes.Eq
+      use PlutusTx.Eq.Eq
   |
 9 | code = $$(PlutusTx.compile [|| \x -> x == (42 :: Integer) ||])
   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -1,12 +1,8 @@
 
-TypeText.hs:9:1: error: [PLINTH-00004]
-    Plinth Compilation Error:
-    Context: Compiling definition at TypeText.hs:9:1-4: code
-    Context: Compiling code:
-             \ (x :: Data.Text.Internal.Text) ->
-               case x of x { Data.Text.Internal.Text _ _ _ -> x }
-    Context: Compiling type: Data.Text.Internal.Text
-    Error: Unsupported feature: Type Data.Text.Internal.Text is not supported in Plinth; use BuiltinString instead
+TypeText.hs:9:10: error: [PLINTH-00008]
+    This code is not valid Plinth:
+      Data.Text.Internal.Text
+    Unsupported feature: Text, use BuiltinString
   |
 9 | code = $$(PlutusTx.compile [|| \x -> x ||])
-  | ^^^^
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

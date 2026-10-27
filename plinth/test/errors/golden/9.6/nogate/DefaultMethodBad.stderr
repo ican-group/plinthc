@@ -1,0 +1,11 @@
+
+MeasureHelper.hs:7:15: error: [PLINTH-00004]
+    Plinth Compilation Error:
+    Context: Compiling code at MeasureHelper.hs:7:15-26:
+             \ (eta :: GHC.Types.Int) ->
+               case eta of { GHC.Types.I# i -> GHC.Num.Integer.IS i }
+    Context: Compiling type: GHC.Types.Int
+    Error: Unsupported feature: Int: use Integer instead
+  |
+7 |   measure _ = fromIntegral (length "default")
+  |               ^^^^^^^^^^^^

@@ -1,11 +1,8 @@
 
-MachineInt.hs:8:10: error: [PLINTH-00004]
-    Plinth Compilation Error:
-    Context: Compiling code at MachineInt.hs:8:10-44:
-             GHC.Types.I# 1#
-    Context: Compiling code:
-             GHC.Types.I#
-    Error: Unsupported feature: Int: use Integer instead
+MachineInt.hs:8:10: error: [PLINTH-00008]
+    This code is not valid Plinth:
+      GHC.Types.Int
+    Unsupported feature: Int, use Integer instead
   |
 8 | code = $$(PlutusTx.compile [|| 1 :: Int ||])
   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

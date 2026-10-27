@@ -1,0 +1,4 @@
+# Modules of the Plinth compiler test-suites that the Plinth gate rejects
+# on purpose: they compile invalid code with defer-errors to test the
+# deferred error path. See Note [The gate sweep] in gate-sweep.sh.
+# One source path per line, as the compiler prints it.
