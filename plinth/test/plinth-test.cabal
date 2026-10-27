@@ -44,7 +44,7 @@ common plinth-options
     -fobject-code -fno-full-laziness -fno-spec-constr
     -fno-specialise -fno-strictness -fno-unbox-small-strict-fields
     -fno-unbox-strict-fields
-    -fplugin-opt Plinth.Plugin:target-version=1.1.0
+    -fplinth-target-version=1.1.0
 
 common plutus-deps
   -- The marker (plinthc) and the anchor/unsupported markers now live in

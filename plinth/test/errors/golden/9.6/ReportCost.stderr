@@ -1,0 +1,19 @@
+
+ReportCost.hs:13:1: warning:
+    [Plinth cost] addOne: 11 bytes (0.1% of max tx size), 6 AST nodes [mainnet, epochs 644-663 (PV 11, as of 2026-10-26)]
+   |
+13 | addOne = $$(compile [|| \i -> i P.+ 1 ||])
+   | ^^^^^^
+
+ReportCost.hs:22:1: warning:
+    [Plinth cost] checkSum: 63 bytes (0.4% of max tx size), 50 AST nodes, CPU 62,795,666 (0.6%), MEM 233,202 (1.4%), execution fee 17,984 lovelace [mainnet, epochs 644-663 (PV 11, as of 2026-10-26)]
+   |
+22 | checkSum = $$(compile [|| P.check (sumDown 100 P.== 5050) ||])
+   | ^^^^^^^^
+
+ReportCost.hs:19:1: warning:
+    [Plinth cost] sumTo: 41 bytes (0.3% of max tx size), 32 AST nodes [mainnet, epochs 644-663 (PV 11, as of 2026-10-26)]
+    the result is not unit: the ledger accepts only a unit result from a PlutusV3 script
+   |
+19 | sumTo = $$(compile [|| sumDown 100 ||])
+   | ^^^^^
