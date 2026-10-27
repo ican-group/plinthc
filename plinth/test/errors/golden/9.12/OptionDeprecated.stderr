@@ -1,0 +1,5 @@
+OptionDeprecated.hs:2:17: warning: [GHC-53692] [-Wdeprecated-flags]
+    -fplugin-opt is deprecated: use -fplinth-conservative-optimisation instead
+  |
+2 | {-# OPTIONS_GHC -fplugin-opt Plinth.Plugin:conservative-optimisation #-}
+  |                 ^^^^^^^^^^^^

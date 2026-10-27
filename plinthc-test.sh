@@ -53,7 +53,8 @@ plutus-tx-plugin:plutus-tx-plugin-tests \
 plutus-tx-plugin:plutus-ledger-api-plugin-test \
 plutus-tx-plugin:frontend-plugin-tests \
 plutus-tx-plugin:size \
-plutus-tx:plutus-tx-test"}
+plutus-tx:plutus-tx-test \
+plinth-cost:plinth-cost-test"}
 
 
 # build Plinth test project
