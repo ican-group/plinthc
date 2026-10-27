@@ -1,3 +1,4 @@
+{-# LANGUAGE NoImplicitPrelude #-}
 -- Helper for the NoUnfolding and DeepChain cases: NOINLINE stops
 -- plinthc from exposing the unfolding of this function. Its body is
 -- valid Plinth, so the missing unfolding is the only problem.

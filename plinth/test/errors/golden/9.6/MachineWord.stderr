@@ -1,15 +1,6 @@
 
 MachineWord.hs:9:10: error: [PLINTH-00008]
     This code is not valid Plinth:
-      GHC.Word.$fNumWord64_$cfromInteger (base-4.18.3.0) uses
-      GHC.Word.Word64
-    Unsupported feature: Word64, use Integer instead
-  |
-9 | code = $$(PlutusTx.compile [|| 42 :: Word64 ||])
-  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-MachineWord.hs:9:10: error: [PLINTH-00008]
-    This code is not valid Plinth:
       GHC.Word.Word64
     Unsupported feature: Word64, use Integer instead
   |

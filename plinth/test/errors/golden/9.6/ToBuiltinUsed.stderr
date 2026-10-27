@@ -1,8 +1,7 @@
 
 ToBuiltinUsed.hs:10:10: error: [PLINTH-00008]
-    This code is not valid Plinth:
-      PlutusTx.Builtins.HasBuiltin.$fHasToBuiltinInteger1
-    Unsupported feature: built without the Plinth checker, build the package with plinthc
+    This code is not valid Plinth: toBuiltin
+      use toOpaque
    |
 10 | code = $$(PlutusTx.compile [|| Builtins.toBuiltin ||])
    |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

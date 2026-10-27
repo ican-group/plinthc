@@ -1,8 +1,7 @@
 
 HaskellEq.hs:9:10: error: [PLINTH-00008]
-    This code is not valid Plinth:
-      GHC.Classes.Eq
-    Unsupported feature: GHC.Classes.Eq, use PlutusTx.Eq.Eq
+    This code is not valid Plinth: GHC.Classes.Eq
+      use PlutusTx.Eq.Eq
   |
 9 | code = $$(PlutusTx.compile [|| \x -> x == (42 :: Integer) ||])
   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

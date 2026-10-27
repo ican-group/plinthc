@@ -1,8 +1,7 @@
 
 IntegerPatternMatch.hs:8:10: error: [PLINTH-00008]
     This code is not valid Plinth:
-      IntegerPatternMatch.isAnswer (IntegerPatternMatch.hs:8:1-8) uses
-      literal pattern
+      IntegerPatternMatch.isAnswer (IntegerPatternMatch.hs:8:1-8)
     Unsupported feature: literal pattern, compare with PlutusTx.Eq.== in a guard
   |
 8 | isAnswer 42 = True

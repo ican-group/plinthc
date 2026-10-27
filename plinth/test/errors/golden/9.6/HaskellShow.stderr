@@ -1,8 +1,7 @@
 
 HaskellShow.hs:9:10: error: [PLINTH-00008]
-    This code is not valid Plinth:
-      GHC.Show.Show
-    Unsupported feature: GHC.Show.Show, use PlutusTx.Show.Show
+    This code is not valid Plinth: GHC.Show.Show
+      use PlutusTx.Show.Show
   |
 9 | code = $$(PlutusTx.compile [|| \x -> show (x :: Integer) ||])
   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

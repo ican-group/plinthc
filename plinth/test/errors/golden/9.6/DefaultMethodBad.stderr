@@ -2,8 +2,10 @@
 DefaultMethodBad.hs:10:10: error: [PLINTH-00008]
     This code is not valid Plinth:
       MeasureHelper.$fMeasureUnit (main, MeasureHelper.hs:12:10-21) uses
-      MeasureHelper.$cmeasure
-    Unsupported feature: the representation of Integer, use the Integer operations of PlutusTx.Prelude
+      MeasureHelper.$fMeasureUnit_$cmeasure (main, MeasureHelper.hs:12:10-21) which uses
+      MeasureHelper.$dmmeasure (main, MeasureHelper.hs:6:3-25) which uses
+      GHC.Types.Int
+    Unsupported feature: Int, use Integer instead
    |
 10 | code = $$(PlutusTx.compile [|| measure ||])
    |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

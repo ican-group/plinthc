@@ -9,8 +9,8 @@ IOAction.hs:8:10: error: [PLINTH-00008]
 
 IOAction.hs:8:10: error: [PLINTH-00008]
     This code is not valid Plinth:
-      GHC.Base.$fApplicativeIO5
-    Unsupported feature: built without the Plinth checker, build the package with plinthc
+      GHC.Base.$fApplicativeIO5 (base-4.18.3.0)
+    Unsupported feature: a binding that the optimiser created, the Plinth check did not see it
   |
 8 | code = $$(PlutusTx.compile [|| return () :: IO () ||])
   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

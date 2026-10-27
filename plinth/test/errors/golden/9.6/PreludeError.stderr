@@ -7,53 +7,15 @@ PreludeError.hs:9:10: error: [PLINTH-00008]
   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 PreludeError.hs:9:10: error: [PLINTH-00008]
-    This code is not valid Plinth:
-      GHC.Err.error (base-4.18.3.0) uses
-      GHC.Types.Char
-    Unsupported feature: Char, use BuiltinString or BuiltinByteString
+    This code is not valid Plinth: GHC.Err.error
+      use PlutusTx.Prelude.error or PlutusTx.Prelude.traceError
   |
 9 | code = $$(PlutusTx.compile [|| error "boom" ||])
   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 PreludeError.hs:9:10: error: [PLINTH-00008]
-    This code is not valid Plinth:
-      GHC.Stack.Types.emptyCallStack (base-4.18.3.0) uses
-      GHC.Types.Char
-    Unsupported feature: Char, use BuiltinString or BuiltinByteString
-  |
-9 | code = $$(PlutusTx.compile [|| error "boom" ||])
-  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-PreludeError.hs:9:10: error: [PLINTH-00008]
-    This code is not valid Plinth:
-      GHC.Types.Int
-    Unsupported feature: Int, use Integer instead
-  |
-9 | code = $$(PlutusTx.compile [|| error "boom" ||])
-  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-PreludeError.hs:9:10: error: [PLINTH-00008]
-    This code is not valid Plinth:
-      GHC.CString.unpackCString# (ghc-prim-0.10.0) uses
-      GHC.Prim.Addr#
-    Unsupported feature: primitive type, use Integer or a builtin type
-  |
-9 | code = $$(PlutusTx.compile [|| error "boom" ||])
-  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-PreludeError.hs:9:10: error: [PLINTH-00008]
-    This code is not valid Plinth:
-      GHC.Types.Char
-    Unsupported feature: Char, use BuiltinString or BuiltinByteString
-  |
-9 | code = $$(PlutusTx.compile [|| error "boom" ||])
-  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-PreludeError.hs:9:10: error: [PLINTH-00008]
-    This code is not valid Plinth:
-      GHC.Stack.Types.pushCallStack (base-4.18.3.0) uses
-      GHC.Types.Char
-    Unsupported feature: Char, use BuiltinString or BuiltinByteString
+    This code is not valid Plinth: implicit parameter
+      pass the value as an argument
   |
 9 | code = $$(PlutusTx.compile [|| error "boom" ||])
   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
