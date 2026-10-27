@@ -66,6 +66,7 @@ optional-packages:
   ../plutus/plutus-core
   ../plutus/plutus-metatheory
   ../plutus/plutus-ledger-api
+  ../plutus/plinth-cost
 
 package secp256k1-clib
   flags: +schnorrsig +recovery +ecdh +extrakeys

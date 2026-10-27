@@ -18,6 +18,10 @@
 #
 # Files named *Helper.hs are companion modules, not test cases.
 #
+# A case with the line "-- plinth-test: expect-success" must compile. Its
+# warnings (e.g. -fplinth-report-cost output) are compared with the golden
+# file in the same way.
+#
 # Usage:
 #   GHC=/path/to/plinthc ./run-error-tests.sh          # run tests
 #   GHC=/path/to/plinthc ACCEPT=1 ./run-error-tests.sh # update goldens
@@ -76,8 +80,8 @@ GHC_ARGS=(
   -package-id "$PLUTUS_TX_ID"
   -package text
   -package bytestring
-  -fplugin-opt "Plinth.Plugin:target-version=1.1.0"
-  -fplugin-opt "Plinth.Plugin:preserve-source-locations"
+  -fplinth-target-version=1.1.0
+  -fplinth-preserve-source-locations
   -fno-full-laziness -fno-spec-constr
   -fno-specialise -fno-strictness -fno-unbox-small-strict-fields
   -fno-unbox-strict-fields
@@ -120,7 +124,14 @@ for case_file in *.hs; do
                  "$case_file" 2>&1)
   rc=$?
 
-  if [ $rc -eq 0 ]; then
+  if grep -q '^-- plinth-test: expect-success' "$case_file"; then
+    if [ $rc -ne 0 ]; then
+      echo "FAIL $name: expected the compilation to succeed, but it failed"
+      printf '%s\n' "$actual_raw" | sed 's/^/    /'
+      failures=$((failures + 1))
+      continue
+    fi
+  elif [ $rc -eq 0 ]; then
     echo "FAIL $name: expected the compilation to fail, but it succeeded"
     failures=$((failures + 1))
     continue
