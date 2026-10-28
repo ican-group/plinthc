@@ -52,7 +52,7 @@ the splice before the plugin ran.
 | HaskellOrd          | Prelude Ord method                 | splice      |
 | HaskellShow         | Prelude Show method                | splice      |
 | IOAction            | IO action                          | splice      |
-| IntegerPatternMatch | pattern match on Integer literal   | splice      |
+| IntegerConstructorMatch | pattern match on IS/IP/IN of Integer | splice |
 | IrreducibleTypeFamily | irreducible type family application | definition |
 | LitChar             | Char literal                       | splice      |
 | LitDouble           | Double literal                     | splice      |
