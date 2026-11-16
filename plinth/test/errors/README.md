@@ -23,13 +23,26 @@ ACCEPT=1 ./run-error-tests.sh
 
 # use a different compiler:
 GHC=/path/to/plinthc ./run-error-tests.sh
+
+# run one mode only:
+MODES=locs ./run-error-tests.sh
 ```
 
 `plinthc-test.sh` runs this suite automatically.
 
-All cases compile with `preserve-source-locations` enabled, because
-the goal of this suite is to track how much source-location
-information each error carries.
+The suite runs each case in two modes:
+
+- `locs`: with the plugin option `preserve-source-locations`. The
+  goldens are in `golden/<GHC major.minor>/`. This mode pins how
+  precise the locations can be.
+- `nolocs`: without the option, as in a project that does not set it.
+  The goldens are in `golden/<GHC major.minor>/nolocs/`. This mode pins
+  what a user gets by default.
+
+In both modes, the runner also does a check that does not depend on the
+goldens: the output of a case must start with a located error header
+(`File.hs:l:c: error:`) and must not contain `<no location info>`. A
+case without a source location fails, also with `ACCEPT=1`.
 
 ## Cases
 
@@ -41,8 +54,15 @@ precise it is: "expression" points at the offending expression,
 location often means GHC inlined a small same-module function into
 the splice before the plugin ran.
 
+The table gives the location in the `locs` mode. In the `nolocs` mode,
+these cases point at the definition instead: DeepChain (at `outer`, not
+at `inner`), LitChar, LitDouble, LitString, MachineInt, MachineWord,
+NoUnfolding and ToBuiltinUsed. The other cases have the same location
+in both modes.
+
 | Case                | Construct                          | Location    |
 |---------------------|------------------------------------|-------------|
+| CrossModule         | unsupported code in an imported function | expression (in the imported module) |
 | DeepChain           | error inside nested functions      | expression  |
 | EnumMethod          | Prelude Enum method                | splice      |
 | EnumRange           | range syntax / enumFromTo          | splice      |
@@ -53,6 +73,7 @@ the splice before the plugin ran.
 | HaskellShow         | Prelude Show method                | splice      |
 | IOAction            | IO action                          | splice      |
 | IntegerPatternMatch | pattern match on Integer literal   | splice      |
+| InvalidMarker       | marker not applied to code         | definition  |
 | IrreducibleTypeFamily | irreducible type family application | definition |
 | LitChar             | Char literal                       | splice      |
 | LitDouble           | Double literal                     | splice      |
@@ -90,7 +111,10 @@ the splice before the plugin ran.
 - runPluginM throws a located GHC diagnostic (PlinthDiagnostic, with
   a [PLINTH-000NN] error code per error class) at the innermost span
   in the error context, so GHC prints the "File.hs:l:c: error:"
-  header and the source snippet with the caret.
+  header and the source snippet with the caret. If no context frame
+  has a span, the error is reported at the start of the module (see
+  Note [Every Plinth error has a location] in
+  plutus-tx-plugin:PlutusTx.Plugin.Common).
 - The Core shown in "Context:" frames is rendered with the GHC
   suppression flags (no occurrence info, coercions, uniques, ticks)
   and with the anchor/unsupported markers stripped.
@@ -115,6 +139,12 @@ When you fix one of these, update the golden files.
    block GHC optimizations. Evaluate gating the injection on modules
    that contain Plinth code, or stripping the markers with a cheap
    Core pass after the Plinth pass.
+
+4. The goldens cover the error codes that user code can trigger:
+   PLINTH-00002, PLINTH-00004, PLINTH-00005 and PLINTH-00006.
+   PLINTH-00001, PLINTH-00003 and PLINTH-00007 are internal errors of
+   the compiler. No known source program triggers them, so no case
+   pins their location.
 
 ## Notes on the runner
 

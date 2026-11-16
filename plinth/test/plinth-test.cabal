@@ -112,4 +112,5 @@ test-suite no-pragmas
   main-is:        Main.hs
   build-depends:
     , base
+    , plinth-test-dep
     , plinth-validators

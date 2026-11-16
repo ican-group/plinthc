@@ -16,6 +16,10 @@
 -- plinth-validators). NoPragmasO0 and this module use -O0. Without the
 -- unfoldings, the splice below fails to compile. The test also
 -- evaluates the script, to check that the definitions are correct.
+--
+-- NoPragmasDep is in another package (plinth-test-dep). That package
+-- does not set the GHC flags of a Plinth project (-fno-strictness,
+-- etc.), as a library that was not written for Plinth.
 module Main (main) where
 
 import PlutusTx
@@ -24,6 +28,7 @@ import PlutusTx.Prelude qualified as P
 import System.Exit (exitFailure)
 
 import NoPragmas
+import NoPragmasDep
 import NoPragmasO0
 
 -- The script fails if the condition is false. It uses 'traceError' on
@@ -41,6 +46,9 @@ script =
             ( if P.not (isEven 7)
                 P.&& sumTo 4 P.== 10
                 P.&& productTo 4 P.== 24
+                P.&& totalWeight [Red, Blue, Green] P.== 111
+                P.&& power 2 5 P.== 32
+                P.&& countDown 3 P.== 3
                 P.&& applyN 3 (P.+ 2) (sumAreas [Square 3, Rect 2 5]) P.== expected
                 then True
                 else P.traceError "no-pragmas: wrong result"
