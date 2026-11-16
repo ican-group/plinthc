@@ -10,6 +10,19 @@
 # Context frames and some module names (GHC.Internal.* since GHC 9.10)
 # depend on the GHC version.
 #
+# The suite runs in two modes:
+#   locs    (default) with the plugin option preserve-source-locations;
+#           goldens in golden/<series>/. It pins how precise the
+#           locations can be.
+#   nolocs  without the option, as in a project that does not set it;
+#           goldens in golden/<series>/nolocs/. It pins what a user gets
+#           by default.
+# MODES="locs" restricts the run.
+#
+# In both modes, the output of a case must start with a located error
+# header ("File.hs:l:c: error:") and must not contain "<no location
+# info>". See Note [Every error has a location].
+#
 # The plutus-tx-plugin golden tests only cover the defer-errors path,
 # which drops the source location and the source snippet. These tests
 # capture the real user-facing output (the "Plinth Compilation Error:"
@@ -32,6 +45,7 @@ TEST_ROOT=$(cd "$HERE/.." && pwd)
 
 : ${GHC:=$TEST_ROOT/../../ghc/_build/stage1/bin/plinthc}
 : ${ACCEPT:=0}
+: ${MODES:="locs nolocs"}
 
 if [ ! -x "$GHC" ]; then
   echo "error: plinthc not found ($GHC). Run plinthc-build.sh first," >&2
@@ -65,9 +79,7 @@ OUTDIR=$(mktemp -d)
 trap 'rm -rf "$OUTDIR"' EXIT
 
 # The flag set of a regular Plinth project (see plinth-test.cabal,
-# common plinth-options), plus preserve-source-locations: these tests
-# exist to pin down how much source-location information the errors
-# carry, so the location machinery must be on.
+# common plinth-options). The locs mode adds preserve-source-locations.
 GHC_ARGS=(
   -package-db "$STORE_DB"
   -package-db "$INPLACE_DB"
@@ -77,7 +89,6 @@ GHC_ARGS=(
   -package text
   -package bytestring
   -fplugin-opt "Plinth.Plugin:target-version=1.1.0"
-  -fplugin-opt "Plinth.Plugin:preserve-source-locations"
   -fno-full-laziness -fno-spec-constr
   -fno-specialise -fno-strictness -fno-unbox-small-strict-fields
   -fno-unbox-strict-fields
@@ -104,58 +115,95 @@ normalize () {
       -e "s/${CR}\$//"
 }
 
+# Note [Every error has a location]
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# A golden file can pin an error without a location by accident: ACCEPT=1
+# accepts any output. This check does not depend on the goldens. The
+# first diagnostic of a case must have a header with a file, a line and a
+# column, and no diagnostic can have "<no location info>".
+#
+#   Good: Case.hs:9:10: error: [PLINTH-00004]
+#   Bad:  <no location info>: error:
+has_location () {
+  printf '%s\n' "$1" | grep -v '^$' | head -n 1 \
+    | grep -q '^[^ :]*\.hs:[0-9][0-9]*:[0-9][0-9]*: error:' \
+    && ! printf '%s\n' "$1" | grep -q '<no location info>'
+}
+
 failures=0
 total=0
 
-cd "$HERE/cases"
-for case_file in *.hs; do
-  case "$case_file" in
-    *Helper.hs) continue ;;
+run_case () {
+  local mode=$1 case_file=$2
+  local name=${case_file%.hs}
+  local golden mode_args actual_raw rc actual diff_out label
+  case "$mode" in
+    locs)   golden="$GOLDEN_DIR/$name.stderr"; label="$name"
+            mode_args=(-fplugin-opt "Plinth.Plugin:preserve-source-locations") ;;
+    nolocs) golden="$GOLDEN_DIR/nolocs/$name.stderr"; label="$name (nolocs)"
+            mode_args=() ;;
+    *)      echo "error: unknown mode: $mode" >&2; exit 2 ;;
   esac
-  name=${case_file%.hs}
-  golden="$GOLDEN_DIR/$name.stderr"
   total=$((total + 1))
 
-  actual_raw=$("$GHC" --make "${GHC_ARGS[@]}" -outputdir "$OUTDIR/$name" \
-                 "$case_file" 2>&1)
+  actual_raw=$("$GHC" --make "${GHC_ARGS[@]}" "${mode_args[@]}" \
+                 -outputdir "$OUTDIR/$mode/$name" "$case_file" 2>&1)
   rc=$?
 
   if [ $rc -eq 0 ]; then
-    echo "FAIL $name: expected the compilation to fail, but it succeeded"
+    echo "FAIL $label: expected the compilation to fail, but it succeeded"
     failures=$((failures + 1))
-    continue
+    return
   fi
 
   actual=$(printf '%s\n' "$actual_raw" | normalize)
 
+  # Checked before ACCEPT: a golden cannot hide a missing location.
+  if ! has_location "$actual"; then
+    echo "FAIL $label: the error has no source location"
+    printf '%s\n' "$actual" | sed 's/^/    /'
+    failures=$((failures + 1))
+    return
+  fi
+
   if [ "$ACCEPT" -eq 1 ]; then
-    mkdir -p "$GOLDEN_DIR"
+    mkdir -p "$(dirname "$golden")"
     printf '%s\n' "$actual" > "$golden"
-    echo "ACCEPT $name"
-    continue
+    echo "ACCEPT $label"
+    return
   fi
 
   if [ ! -f "$golden" ]; then
-    echo "FAIL $name: golden file missing ($golden); run with ACCEPT=1"
+    echo "FAIL $label: golden file missing ($golden); run with ACCEPT=1"
     failures=$((failures + 1))
-    continue
+    return
   fi
 
   if ! diff_out=$(printf '%s\n' "$actual" | diff -u "$golden" - 2>&1); then
-    echo "FAIL $name: output differs from golden"
+    echo "FAIL $label: output differs from golden"
     echo "$diff_out" | sed 's/^/    /'
     failures=$((failures + 1))
   else
-    echo "ok   $name"
+    echo "ok   $label"
   fi
+}
+
+cd "$HERE/cases"
+for mode in $MODES; do
+  for case_file in *.hs; do
+    case "$case_file" in
+      *Helper.hs) continue ;;
+    esac
+    run_case "$mode" "$case_file"
+  done
 done
 
 echo ""
-if [ "$ACCEPT" -eq 1 ]; then
-  echo "error-tests: accepted goldens for $total cases"
-elif [ $failures -eq 0 ]; then
-  echo "error-tests: all $total cases passed"
-else
+if [ $failures -ne 0 ]; then
   echo "error-tests: $failures of $total cases failed"
   exit 1
+elif [ "$ACCEPT" -eq 1 ]; then
+  echo "error-tests: accepted goldens for $total cases"
+else
+  echo "error-tests: all $total cases passed"
 fi

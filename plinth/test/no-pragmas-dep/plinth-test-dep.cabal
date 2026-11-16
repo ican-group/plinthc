@@ -1,0 +1,16 @@
+cabal-version: 3.0
+name:          plinth-test-dep
+version:       0.1.0.0
+build-type:    Simple
+
+-- A package that knows nothing about Plinth: no Plinth-specific GHC
+-- flags, no INLINABLE pragmas, default optimisation level.
+-- See Note [No INLINABLE pragmas] in ../no-pragmas/Main.hs.
+library
+  default-language: Haskell2010
+  ghc-options:      -Wall
+  hs-source-dirs:   src
+  exposed-modules:  NoPragmasDep
+  build-depends:
+    , base
+    , plutus-tx  ^>=1.70.0.0

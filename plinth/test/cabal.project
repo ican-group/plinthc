@@ -20,6 +20,7 @@ index-state:
 
 packages:
   ./.
+  ./no-pragmas-dep
 
 optional-packages:
   ../../plutus/plutus-tx
