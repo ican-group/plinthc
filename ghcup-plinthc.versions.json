@@ -1141,7 +1141,293 @@
         }
       },
       "viReleaseDay": "2026-11-17"
+    },
+    "9.12.170.2": {
+      "viArch": {
+        "A_ARM64": {
+          "Linux_Alpine": {
+            "unknown_versioning": {
+              "dlUri": "https://github.com/ican-group/plinthc/releases/download/v9.12.170.2/plinthc-9.12.170.2-aarch64-alpine-linux-musl.tar.xz",
+              "dlHash": "30f38f5e94a3d9c2d564249d4ce41cd850379ffb9118566d0552caeb6b90524d",
+              "dlSubdir": "plinthc-9.12.170.2-aarch64-alpine-linux-musl",
+              "dlInstallSpec": {
+                "exeRules": [],
+                "dataRules": [],
+                "configure": {
+                  "configFile": "configure",
+                  "configArgs": [
+                    "--prefix=${PREFIX}",
+                    "--disable-ld-override"
+                  ]
+                },
+                "make": {
+                  "makeArgs": [
+                    "install"
+                  ],
+                  "makeEnv": {
+                    "env": [
+                      [
+                        "DESTDIR",
+                        "${TMPDIR}"
+                      ]
+                    ],
+                    "union": "PreferSpec"
+                  }
+                },
+                "exeSymLinked": [
+                  {
+                    "target": "bin/plinthc",
+                    "linkName": "plinthc-${PKGVER}",
+                    "pVPMajorLinks": true,
+                    "setName": "plinthc"
+                  },
+                  {
+                    "target": "bin/ghc-pkg",
+                    "linkName": "plinthc-pkg-${PKGVER}",
+                    "pVPMajorLinks": true,
+                    "setName": "plinthc-pkg"
+                  }
+                ],
+                "preserveMtimes": true
+              }
+            }
+          },
+          "Darwin": {
+            "unknown_versioning": {
+              "dlUri": "https://github.com/ican-group/plinthc/releases/download/v9.12.170.2/plinthc-9.12.170.2-aarch64-apple-darwin.tar.xz",
+              "dlHash": "750ff1aa7594d9a4b76624fc1e0117500a4a31d22b145e63785686eea6554fc2",
+              "dlSubdir": "plinthc-9.12.170.2-aarch64-apple-darwin",
+              "dlInstallSpec": {
+                "exeRules": [],
+                "dataRules": [],
+                "configure": {
+                  "configFile": "configure",
+                  "configArgs": [
+                    "--prefix=${PREFIX}",
+                    "--disable-ld-override"
+                  ]
+                },
+                "make": {
+                  "makeArgs": [
+                    "install"
+                  ],
+                  "makeEnv": {
+                    "env": [
+                      [
+                        "DESTDIR",
+                        "${TMPDIR}"
+                      ]
+                    ],
+                    "union": "PreferSpec"
+                  }
+                },
+                "exeSymLinked": [
+                  {
+                    "target": "bin/plinthc",
+                    "linkName": "plinthc-${PKGVER}",
+                    "pVPMajorLinks": true,
+                    "setName": "plinthc"
+                  },
+                  {
+                    "target": "bin/ghc-pkg",
+                    "linkName": "plinthc-pkg-${PKGVER}",
+                    "pVPMajorLinks": true,
+                    "setName": "plinthc-pkg"
+                  }
+                ],
+                "preserveMtimes": true
+              }
+            }
+          },
+          "Linux_UnknownLinux": {
+            "unknown_versioning": {
+              "dlUri": "https://github.com/ican-group/plinthc/releases/download/v9.12.170.2/plinthc-9.12.170.2-aarch64-unknown-linux.tar.xz",
+              "dlHash": "e77ac304c3dff209ba4e34ae8854f00638371a132a17482014a72ff038f01c3c",
+              "dlSubdir": "plinthc-9.12.170.2-aarch64-unknown-linux",
+              "dlInstallSpec": {
+                "exeRules": [],
+                "dataRules": [],
+                "configure": {
+                  "configFile": "configure",
+                  "configArgs": [
+                    "--prefix=${PREFIX}",
+                    "--disable-ld-override"
+                  ]
+                },
+                "make": {
+                  "makeArgs": [
+                    "install"
+                  ],
+                  "makeEnv": {
+                    "env": [
+                      [
+                        "DESTDIR",
+                        "${TMPDIR}"
+                      ]
+                    ],
+                    "union": "PreferSpec"
+                  }
+                },
+                "exeSymLinked": [
+                  {
+                    "target": "bin/plinthc",
+                    "linkName": "plinthc-${PKGVER}",
+                    "pVPMajorLinks": true,
+                    "setName": "plinthc"
+                  },
+                  {
+                    "target": "bin/ghc-pkg",
+                    "linkName": "plinthc-pkg-${PKGVER}",
+                    "pVPMajorLinks": true,
+                    "setName": "plinthc-pkg"
+                  }
+                ],
+                "preserveMtimes": true
+              }
+            }
+          }
+        },
+        "A_64": {
+          "Linux_Alpine": {
+            "unknown_versioning": {
+              "dlUri": "https://github.com/ican-group/plinthc/releases/download/v9.12.170.2/plinthc-9.12.170.2-x86_64-unknown-linux-musl.tar.xz",
+              "dlHash": "2209603b6c4b9f426981d672686e4e8bb62c3ba776345025a078bcf68b179d8b",
+              "dlSubdir": "plinthc-9.12.170.2-x86_64-unknown-linux-musl",
+              "dlInstallSpec": {
+                "exeRules": [],
+                "dataRules": [],
+                "configure": {
+                  "configFile": "configure",
+                  "configArgs": [
+                    "--prefix=${PREFIX}",
+                    "--disable-ld-override"
+                  ]
+                },
+                "make": {
+                  "makeArgs": [
+                    "install"
+                  ],
+                  "makeEnv": {
+                    "env": [
+                      [
+                        "DESTDIR",
+                        "${TMPDIR}"
+                      ]
+                    ],
+                    "union": "PreferSpec"
+                  }
+                },
+                "exeSymLinked": [
+                  {
+                    "target": "bin/plinthc",
+                    "linkName": "plinthc-${PKGVER}",
+                    "pVPMajorLinks": true,
+                    "setName": "plinthc"
+                  },
+                  {
+                    "target": "bin/ghc-pkg",
+                    "linkName": "plinthc-pkg-${PKGVER}",
+                    "pVPMajorLinks": true,
+                    "setName": "plinthc-pkg"
+                  }
+                ],
+                "preserveMtimes": true
+              }
+            }
+          },
+          "Linux_UnknownLinux": {
+            "unknown_versioning": {
+              "dlUri": "https://github.com/ican-group/plinthc/releases/download/v9.12.170.2/plinthc-9.12.170.2-x86_64-unknown-linux.tar.xz",
+              "dlHash": "4e21ef9023df9f4eacd12d9e434dc3364912e2345e02088f5adec2781c3fa217",
+              "dlSubdir": "plinthc-9.12.170.2-x86_64-unknown-linux",
+              "dlInstallSpec": {
+                "exeRules": [],
+                "dataRules": [],
+                "configure": {
+                  "configFile": "configure",
+                  "configArgs": [
+                    "--prefix=${PREFIX}",
+                    "--disable-ld-override"
+                  ]
+                },
+                "make": {
+                  "makeArgs": [
+                    "install"
+                  ],
+                  "makeEnv": {
+                    "env": [
+                      [
+                        "DESTDIR",
+                        "${TMPDIR}"
+                      ]
+                    ],
+                    "union": "PreferSpec"
+                  }
+                },
+                "exeSymLinked": [
+                  {
+                    "target": "bin/plinthc",
+                    "linkName": "plinthc-${PKGVER}",
+                    "pVPMajorLinks": true,
+                    "setName": "plinthc"
+                  },
+                  {
+                    "target": "bin/ghc-pkg",
+                    "linkName": "plinthc-pkg-${PKGVER}",
+                    "pVPMajorLinks": true,
+                    "setName": "plinthc-pkg"
+                  }
+                ],
+                "preserveMtimes": true
+              }
+            }
+          },
+          "Windows": {
+            "unknown_versioning": {
+              "dlUri": "https://github.com/ican-group/plinthc/releases/download/v9.12.170.2/plinthc-9.12.170.2-x86_64-unknown-mingw32.tar.xz",
+              "dlHash": "4c0c1859d18a53e5e8d91a3f55ab6cf607e36ef5bf8eac6c3dd96307c5711f4b",
+              "dlSubdir": "plinthc-9.12.170.2-x86_64-unknown-mingw32",
+              "dlInstallSpec": {
+                "exeRules": [
+                  {
+                    "installPattern": [
+                      "bin/**"
+                    ]
+                  }
+                ],
+                "dataRules": [
+                  {
+                    "installPattern": [
+                      "doc/**",
+                      "lib/**",
+                      "man/**",
+                      "mingw/**",
+                      "share/**"
+                    ]
+                  }
+                ],
+                "exeSymLinked": [
+                  {
+                    "target": "bin/plinthc.exe",
+                    "linkName": "plinthc-${PKGVER}.exe",
+                    "pVPMajorLinks": true,
+                    "setName": "plinthc.exe"
+                  },
+                  {
+                    "target": "bin/ghc-pkg.exe",
+                    "linkName": "plinthc-pkg-${PKGVER}.exe",
+                    "pVPMajorLinks": true,
+                    "setName": "plinthc-pkg.exe"
+                  }
+                ],
+                "preserveMtimes": true
+              }
+            }
+          }
+        }
+      },
+      "viReleaseDay": "2026-11-17"
     }
   },
-  "latest": "9.12.170.1"
+  "latest": "9.12.170.2"
 }
