@@ -146,7 +146,8 @@ run_case () {
   esac
   total=$((total + 1))
 
-  actual_raw=$("$GHC" --make "${GHC_ARGS[@]}" "${mode_args[@]}" \
+  # "${a[@]+...}": bash 3.2 (macOS) rejects an empty array under set -u.
+  actual_raw=$("$GHC" --make "${GHC_ARGS[@]}" ${mode_args[@]+"${mode_args[@]}"} \
                  -outputdir "$OUTDIR/$mode/$name" "$case_file" 2>&1)
   rc=$?
 
