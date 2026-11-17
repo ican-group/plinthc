@@ -1,0 +1,7 @@
+InvalidMarker.hs:9:1: error: [PLINTH-00006]
+    Plinth Compilation Error:
+    Context: Compiling definition at InvalidMarker.hs:9:1-4: code
+    Error: Found invalid marker, not applied correctly in expression plinthc
+  |
+9 | code = plinthc
+  | ^^^^

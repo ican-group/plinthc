@@ -1,0 +1,8 @@
+CrossModuleHelper.hs:8:29: error: [PLINTH-00004]
+    Plinth Compilation Error:
+    Context: Compiling code at CrossModuleHelper.hs:8:29-33:
+             GHC.Internal.Err.error
+    Error: Unsupported feature: GHC.Internal.Err.error, use PlutusTx.Prelude.error or PlutusTx.Prelude.traceError
+  |
+8 | checked n = if n P.< 0 then error "negative" else n
+  |                             ^^^^^
