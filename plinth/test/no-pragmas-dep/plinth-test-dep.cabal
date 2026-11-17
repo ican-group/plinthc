@@ -13,4 +13,4 @@ library
   exposed-modules:  NoPragmasDep
   build-depends:
     , base
-    , plutus-tx  ^>=1.70.0.0
+    , plutus-tx  ^>=1.72.0.0
