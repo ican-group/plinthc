@@ -149,6 +149,9 @@ package:
 
 A script that you compile for a higher version than the chain fails when the
 ledger runs it.
+The option also selects the Plutus Core version of the compiled code: 1.1.0
+below protocol version 12, and 1.2.0 from 12 on. A value that you apply to the
+compiled code with `liftCode` must have the same version.
 The uplc-ghc releases 9.6.169.1 and 9.6.169.2, the predecessors of plinthc,
 compile for protocol version 12, so their scripts that decode data types fail
 on mainnet.

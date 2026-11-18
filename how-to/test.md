@@ -79,20 +79,23 @@ compiled on-chain program. For that, evaluate the compiled code.
 ## Evaluate the compiled script
 
 To run the actual on-chain program, apply an argument to `validatorCode` and
-evaluate it on the CEK machine. `PlutusTx.unsafeApplyCode` and `liftCodeDef` bake
+evaluate it on the CEK machine. `PlutusTx.unsafeApplyCode` and `liftCode` bake
 a `BuiltinData` argument into the compiled code (the same application machinery
 used to apply [parameters]({% link explanation/structure.md %})), and
-`evaluateCompiledCode` from `PlutusTx.Eval` runs it:
+`evaluateCompiledCode` from `PlutusTx.Eval` runs it. The two programs must
+have the same Plutus Core version: plinthc compiles for mainnet by default,
+which gives version 1.1.0, so lift the argument with `plcVersion110`:
 
 ```haskell
-import PlutusTx (unsafeApplyCode, liftCodeDef, toBuiltinData)
+import PlutusCore.Version (plcVersion110)
+import PlutusTx (unsafeApplyCode, liftCode, toBuiltinData)
 import PlutusTx.Eval (EvalResult (..), evaluateCompiledCode)
 import Data.Either (isLeft, isRight)
 
 runWith :: Integer -> EvalResult
 runWith n =
   evaluateCompiledCode
-    (validatorCode `unsafeApplyCode` liftCodeDef (toBuiltinData n))
+    (validatorCode `unsafeApplyCode` liftCode plcVersion110 (toBuiltinData n))
 
 evalTests :: TestTree
 evalTests = testGroup "compiled script"
