@@ -28,7 +28,7 @@ a small set of patches:
 | Path      | Repository                     | Branch          | Upstream base           |
 |-----------|--------------------------------|-----------------|-------------------------|
 | `ghc/`    | `ican-group/ghc-plinth`        | `plinthc-9.6.7` | GHC `ghc-9.6.7-release` |
-| `plutus/` | `ican-group/ghc-plinth-plutus` | `plinthc-1.70`  | plutus `1.70.0.0`       |
+| `plutus/` | `ican-group/ghc-plinth-plutus` | `plinthc-1.72`  | plutus `1.72.0.0`       |
 
 Get the sources with `git clone --recursive`, or run
 `git submodule update --init --recursive` after the clone. Then:
