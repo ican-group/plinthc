@@ -22,6 +22,7 @@
 -- etc.), as a library that was not written for Plinth.
 module Main (main) where
 
+import PlutusCore.Version (plcVersion110)
 import PlutusTx
 import PlutusTx.Eval (evaluatesWithoutError)
 import PlutusTx.Prelude qualified as P
@@ -56,9 +57,11 @@ script =
         ||]
     )
 
+-- The script has Plutus Core 1.1.0, the version for the default target
+-- protocol version (11): the parameter is lifted at the same version.
 run :: Integer -> Bool
 run expected =
-  evaluatesWithoutError (script `unsafeApplyCode` liftCodeDef expected)
+  evaluatesWithoutError (script `unsafeApplyCode` liftCode plcVersion110 expected)
 
 main :: IO ()
 main
