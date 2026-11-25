@@ -1160,3 +1160,195 @@ ghcupDownloads:
                       pVPMajorLinks: true
                       setName: plinthc-pkg.exe
                   preserveMtimes: true
+      9.6.172.1:
+        viTags: []
+        viReleaseDay: 2026-11-25
+        viArch:
+          A_ARM64:
+            Linux_Alpine:
+              unknown_versioning:
+                dlUri: "https://github.com/ican-group/plinthc/releases/download/v9.6.172.1/plinthc-9.6.172.1-aarch64-alpine-linux-musl.tar.xz"
+                dlHash: 80b6e969cc4008f747a39cf240f428649fbf0daf72300567de474b335412d898
+                dlSubdir: plinthc-9.6.172.1-aarch64-alpine-linux-musl
+                dlInstallSpec:
+                  exeRules: []
+                  dataRules: []
+                  configure:
+                    configFile: configure
+                    configArgs:
+                      - "--prefix=${PREFIX}"
+                      - "--disable-ld-override"
+                  make:
+                    makeArgs:
+                      - install
+                    makeEnv:
+                      env:
+                        -
+                          - DESTDIR
+                          - "${TMPDIR}"
+                      union: PreferSpec
+                  exeSymLinked:
+                    - target: bin/plinthc
+                      linkName: "plinthc-${PKGVER}"
+                      pVPMajorLinks: true
+                      setName: plinthc
+                    - target: bin/ghc-pkg
+                      linkName: "plinthc-pkg-${PKGVER}"
+                      pVPMajorLinks: true
+                      setName: plinthc-pkg
+                  preserveMtimes: true
+            Darwin:
+              unknown_versioning:
+                dlUri: "https://github.com/ican-group/plinthc/releases/download/v9.6.172.1/plinthc-9.6.172.1-aarch64-apple-darwin.tar.xz"
+                dlHash: e3c1ff4bd376d28bcf2eb0e3989a15c26ab48c3ac7c62443167e205ad695d967
+                dlSubdir: plinthc-9.6.172.1-aarch64-apple-darwin
+                dlInstallSpec:
+                  exeRules: []
+                  dataRules: []
+                  configure:
+                    configFile: configure
+                    configArgs:
+                      - "--prefix=${PREFIX}"
+                      - "--disable-ld-override"
+                  make:
+                    makeArgs:
+                      - install
+                    makeEnv:
+                      env:
+                        -
+                          - DESTDIR
+                          - "${TMPDIR}"
+                      union: PreferSpec
+                  exeSymLinked:
+                    - target: bin/plinthc
+                      linkName: "plinthc-${PKGVER}"
+                      pVPMajorLinks: true
+                      setName: plinthc
+                    - target: bin/ghc-pkg
+                      linkName: "plinthc-pkg-${PKGVER}"
+                      pVPMajorLinks: true
+                      setName: plinthc-pkg
+                  preserveMtimes: true
+            Linux_UnknownLinux:
+              unknown_versioning:
+                dlUri: "https://github.com/ican-group/plinthc/releases/download/v9.6.172.1/plinthc-9.6.172.1-aarch64-unknown-linux.tar.xz"
+                dlHash: 637c1418fd158778ac0684589888d4c60961a05daafc41941764e67d7f1311f8
+                dlSubdir: plinthc-9.6.172.1-aarch64-unknown-linux
+                dlInstallSpec:
+                  exeRules: []
+                  dataRules: []
+                  configure:
+                    configFile: configure
+                    configArgs:
+                      - "--prefix=${PREFIX}"
+                      - "--disable-ld-override"
+                  make:
+                    makeArgs:
+                      - install
+                    makeEnv:
+                      env:
+                        -
+                          - DESTDIR
+                          - "${TMPDIR}"
+                      union: PreferSpec
+                  exeSymLinked:
+                    - target: bin/plinthc
+                      linkName: "plinthc-${PKGVER}"
+                      pVPMajorLinks: true
+                      setName: plinthc
+                    - target: bin/ghc-pkg
+                      linkName: "plinthc-pkg-${PKGVER}"
+                      pVPMajorLinks: true
+                      setName: plinthc-pkg
+                  preserveMtimes: true
+          A_64:
+            Linux_Alpine:
+              unknown_versioning:
+                dlUri: "https://github.com/ican-group/plinthc/releases/download/v9.6.172.1/plinthc-9.6.172.1-x86_64-unknown-linux-musl.tar.xz"
+                dlHash: d56af82cd7aaa0b17df1d63835e754e01900f4474dd3ad6aefb6c5b07dd26247
+                dlSubdir: plinthc-9.6.172.1-x86_64-unknown-linux-musl
+                dlInstallSpec:
+                  exeRules: []
+                  dataRules: []
+                  configure:
+                    configFile: configure
+                    configArgs:
+                      - "--prefix=${PREFIX}"
+                      - "--disable-ld-override"
+                  make:
+                    makeArgs:
+                      - install
+                    makeEnv:
+                      env:
+                        -
+                          - DESTDIR
+                          - "${TMPDIR}"
+                      union: PreferSpec
+                  exeSymLinked:
+                    - target: bin/plinthc
+                      linkName: "plinthc-${PKGVER}"
+                      pVPMajorLinks: true
+                      setName: plinthc
+                    - target: bin/ghc-pkg
+                      linkName: "plinthc-pkg-${PKGVER}"
+                      pVPMajorLinks: true
+                      setName: plinthc-pkg
+                  preserveMtimes: true
+            Linux_UnknownLinux:
+              unknown_versioning:
+                dlUri: "https://github.com/ican-group/plinthc/releases/download/v9.6.172.1/plinthc-9.6.172.1-x86_64-unknown-linux.tar.xz"
+                dlHash: a1fa70625f231e1668d8e2258db29d20393e84507dbf1a557c8c9165ba64a441
+                dlSubdir: plinthc-9.6.172.1-x86_64-unknown-linux
+                dlInstallSpec:
+                  exeRules: []
+                  dataRules: []
+                  configure:
+                    configFile: configure
+                    configArgs:
+                      - "--prefix=${PREFIX}"
+                      - "--disable-ld-override"
+                  make:
+                    makeArgs:
+                      - install
+                    makeEnv:
+                      env:
+                        -
+                          - DESTDIR
+                          - "${TMPDIR}"
+                      union: PreferSpec
+                  exeSymLinked:
+                    - target: bin/plinthc
+                      linkName: "plinthc-${PKGVER}"
+                      pVPMajorLinks: true
+                      setName: plinthc
+                    - target: bin/ghc-pkg
+                      linkName: "plinthc-pkg-${PKGVER}"
+                      pVPMajorLinks: true
+                      setName: plinthc-pkg
+                  preserveMtimes: true
+            Windows:
+              unknown_versioning:
+                dlUri: "https://github.com/ican-group/plinthc/releases/download/v9.6.172.1/plinthc-9.6.172.1-x86_64-unknown-mingw32.tar.xz"
+                dlHash: 4ef12e4ebca2df939cfc50f9426e5dfc59759244e07dbb084e40253dd716a650
+                dlSubdir: plinthc-9.6.172.1-x86_64-unknown-mingw32
+                dlInstallSpec:
+                  exeRules:
+                    - installPattern:
+                        - "bin/**"
+                  dataRules:
+                    - installPattern:
+                        - "doc/**"
+                        - "lib/**"
+                        - "man/**"
+                        - "mingw/**"
+                        - "share/**"
+                  exeSymLinked:
+                    - target: bin/plinthc.exe
+                      linkName: "plinthc-${PKGVER}.exe"
+                      pVPMajorLinks: true
+                      setName: plinthc.exe
+                    - target: bin/ghc-pkg.exe
+                      linkName: "plinthc-pkg-${PKGVER}.exe"
+                      pVPMajorLinks: true
+                      setName: plinthc-pkg.exe
+                  preserveMtimes: true
