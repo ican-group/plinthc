@@ -30,7 +30,7 @@ a small set of patches:
 | `ghc/`    | `ican-group/ghc-plinth`        | `plinthc-9.12.4` | GHC `ghc-9.12.4-release` |
 | `plutus/` | `ican-group/ghc-plinth-plutus` | `plinthc-1.72`   | plutus `1.72.0.0`        |
 
-This is the `ghc-9.12` branch: plinthc on GHC 9.12. The `master` branch is
+This is the `plinthc-9.12` branch: plinthc on GHC 9.12. The `plinthc-9.6` branch is
 the same product on GHC 9.6 (`ghc` submodule on `plinthc-9.6.7`). Both share
 the plutus fork branch and publish to the same ghcup channel: 9.12-based
 releases are 9.12.<plinth>.N, 9.6-based ones 9.6.<plinth>.N.
