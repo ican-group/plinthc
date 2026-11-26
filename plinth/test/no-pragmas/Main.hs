@@ -4,9 +4,10 @@
 -- Note [No INLINABLE pragmas]
 -- ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -- Plinth code can use functions of other modules and packages without
--- INLINABLE pragmas: Plinth.Plugin adds INLINABLE to every binding that
--- has no inline pragma of its own, so GHC keeps the unfoldings that the
--- Plinth compiler needs in the interface files.
+-- INLINABLE pragmas: GHC adds INLINABLE to every binding that has no
+-- inline pragma of its own, so it keeps the unfoldings that the Plinth
+-- compiler needs in the interface files (see Note [Default INLINABLE
+-- pragmas] in ghc:GHC.Tc.Module).
 --
 -- In plinthc, -O0 does not imply -fomit-interface-pragmas and
 -- -fignore-interface-pragmas (see Note [Keep interface pragmas] in
@@ -20,11 +21,19 @@
 -- NoPragmasDep is in another package (plinth-test-dep). That package
 -- does not set the GHC flags of a Plinth project (-fno-strictness,
 -- etc.), as a library that was not written for Plinth.
+--
+-- GHC also does this for the boot libraries. The test uses foldTree and
+-- unfoldTree of containers (Data.Tree): containers has no INLINABLE
+-- pragma on unfoldTree and its helper unfoldForest, and unfoldForest uses
+-- map of base, which has a NOINLINE [0] pragma. The test does not compile
+-- containers: it uses the containers package of plinthc.
 module Main (main) where
 
+import Data.Tree (foldTree, unfoldTree)
 import PlutusCore.Version (plcVersion110)
 import PlutusTx
 import PlutusTx.Eval (evaluatesWithoutError)
+import PlutusTx.Foldable qualified as F
 import PlutusTx.Prelude qualified as P
 import System.Exit (exitFailure)
 
@@ -50,6 +59,15 @@ script =
                 P.&& totalWeight [Red, Blue, Green] P.== 111
                 P.&& power 2 5 P.== 32
                 P.&& countDown 3 P.== 3
+                -- The children of n > 0 are (n - 1) and (n - 2). The sum
+                -- of the tree is 3 + (2 + (1 + 0 + -1) + 0) + (1 + 0 + -1).
+                P.&& foldTree
+                  (\x xs -> x P.+ F.sum xs)
+                  ( unfoldTree
+                      (\n -> (n, if n P.<= 0 then [] else [n P.- 1, n P.- 2]))
+                      (3 :: Integer)
+                  )
+                  P.== 5
                 P.&& applyN 3 (P.+ 2) (sumAreas [Square 3, Rect 2 5]) P.== expected
                 then True
                 else P.traceError "no-pragmas: wrong result"
