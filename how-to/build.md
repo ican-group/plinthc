@@ -36,7 +36,7 @@ the recommended GHC 9.12-based compiler, `plinthc-9.6` the GHC 9.6-based one.
 | Submodule | Repository                     | Branch                                       | Provides                                               |
 | --------- | ------------------------------ | -------------------------------------------- | ------------------------------------------------------ |
 | `ghc`     | `ican-group/ghc-plinth`        | `plinthc-9.12.4` (or `plinthc-9.6.7`)        | GHC 9.12.4 (or 9.6.7) with the plinthc patches         |
-| `plutus`  | `ican-group/ghc-plinth-plutus` | `plinthc-1.70`                               | `plutus-tx`, `plutus-tx-plugin` and `plutus-core` 1.70 |
+| `plutus`  | `ican-group/ghc-plinth-plutus` | `plinthc-1.72`                               | `plutus-tx`, `plutus-tx-plugin` and `plutus-core` 1.72 |
 
 ```console
 $ git clone --recurse-submodules -b plinthc-9.12 git@github.com:ican-group/plinthc.git
