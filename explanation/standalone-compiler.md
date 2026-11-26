@@ -40,7 +40,8 @@ GHC, brings several benefits:
   code.
 - **Freedom to adapt GHC.** Because the compiler is ours, we can change GHC
   itself to suit Plinth rather than working within the limits of the plugin
-  interface &mdash; better diagnostics, error messages, and developer experience.
+  interface &mdash; better diagnostics, error messages, and developer experience
+  (see [Difference between plinthc and the plugin]({% link explanation/plinthc-and-the-plugin.md %})).
 - **Prebuilt boot libraries with Plinth support.** The compiler ships with its
   boot libraries already built for Plinth, so their definitions compile to Plutus
   Core out of the box instead of every user rebuilding them.
@@ -50,6 +51,28 @@ GHC, brings several benefits:
   lockstep, which makes the generated Plutus Core reproducible and lets the whole
   thing be validated as a single unit (see the test and benchmark scripts in
   [Build plinthc from source]({% link how-to/build.md %}#test-and-benchmark)).
+
+## Script hashes when you move from the plugin
+
+plinthc and a stock GHC with `plutus-tx-plugin` can compile the same script to
+different Plutus Core, also with the same GHC version and the same Plinth
+version. The reason is the Reproducibility point above: plinthc changes how
+GHC compiles the code before the Plinth compiler translates it.
+
+A different Plutus Core gives a different script hash, and thus a different
+script address and minting policy ID. The behaviour of the script stays the
+same, but its size and execution cost can be a little different.
+
+If you move a project from the plugin to plinthc:
+
+- Compile the scripts again and use the new hashes and addresses.
+- Do not send funds to an address that you calculated with the plugin, unless
+  you keep the script that the plugin compiled.
+- To keep a deployed script, keep its compiled code (for example in a
+  [blueprint]({% link how-to/generate-blueprint.md %})), not only its source.
+
+With the same plinthc release, the same dependencies and the same flags, the
+same source always gives the same script.
 
 ## Further reading
 

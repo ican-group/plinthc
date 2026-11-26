@@ -62,12 +62,12 @@ The rest of the tutorial assumes the compiler is available as plain
 
 `plinthc` is distributed via ghcup as a custom tool named `plinthc` (see
 [Install plinthc]({% link how-to/install.md %}) for the
-details). Add the plinthc release channel, then install and activate the tool:
+details). Add the plinthc release channel, then install and activate the
+tool:
 
 ```console
 > ghcup config add-release-channel https://raw.githubusercontent.com/ican-group/plinthc/ghcup-channel/ghcup-plinthc.yaml
-> ghcup install plinthc 9.12.172.1
-> ghcup set plinthc 9.12.172.1
+> ghcup install plinthc 9.12.172.1 --set
 ```
 
 Check that the compiler is on `PATH`:
