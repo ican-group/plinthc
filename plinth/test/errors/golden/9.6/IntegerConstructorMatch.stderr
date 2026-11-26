@@ -1,31 +1,17 @@
 
-IntegerPatternMatch.hs:8:1: error: [PLINTH-00004]
+IntegerConstructorMatch.hs:13:1: error: [PLINTH-00004]
     Plinth Compilation Error:
-    Context: Compiling definition at IntegerPatternMatch.hs:8:1-8: IntegerPatternMatch.isAnswer
+    Context: Compiling definition at IntegerConstructorMatch.hs:13:1-7: IntegerConstructorMatch.isSmall
     Context: Compiling code:
              \ (ds :: GHC.Num.Integer.Integer) ->
                case ds of {
-                 GHC.Num.Integer.IS x1 ->
-                   GHC.Prim.tagToEnum#
-                     @GHC.Types.Bool
-                     (case x1 of {
-                        __DEFAULT -> 0#;
-                        42# -> 1#
-                      });
-                 GHC.Num.Integer.IP _ -> GHC.Types.False;
-                 GHC.Num.Integer.IN _ -> GHC.Types.False
+                 __DEFAULT -> GHC.Types.False;
+                 GHC.Num.Integer.IS _ -> GHC.Types.True
                }
     Context: Compiling code:
              case ds of {
-               GHC.Num.Integer.IS x1 ->
-                 GHC.Prim.tagToEnum#
-                   @GHC.Types.Bool
-                   (case x1 of {
-                      __DEFAULT -> 0#;
-                      42# -> 1#
-                    });
-               GHC.Num.Integer.IP _ -> GHC.Types.False;
-               GHC.Num.Integer.IN _ -> GHC.Types.False
+               __DEFAULT -> GHC.Types.False;
+               GHC.Num.Integer.IS _ -> GHC.Types.True
              }
     Context: Creating instantiated matcher for type: GHC.Num.Integer.Integer
     Error: Unsupported feature: Cannot pattern match on a value of type 'Integer'.
@@ -45,6 +31,6 @@ IntegerPatternMatch.hs:8:1: error: [PLINTH-00004]
                  | otherwise = ...
     
            Note: GHC can generate these unexpectedly, you may need '-fno-strictness', '-fno-specialise', '-fno-spec-constr', '-fno-unbox-strict-fields', or '-fno-unbox-small-strict-fields'.
-  |
-8 | isAnswer 42 = True
-  | ^^^^^^^^
+   |
+13 | isSmall (IS _) = True
+   | ^^^^^^^
