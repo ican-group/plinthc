@@ -41,6 +41,8 @@ docs:
         url: /explanation/languages/
       - title: "plinthc"
         url: /explanation/standalone-compiler/
+      - title: "Difference between plinthc and the plugin"
+        url: /explanation/plinthc-and-the-plugin/
 
   - title: Tutorials
     url: /tutorials/
