@@ -11,21 +11,20 @@ esac
 
 RELEASE_HADRIAN_ARGS=""
 DEV_HADRIAN_ARGS="--docs=none"
-# expose_unfoldings: base, ghc-prim and ghc-bignum must have the
-# unfoldings of all their definitions, because the Plinth compiler
-# translates them. plinthc does not compile these libraries, so they do
-# not get the INLINABLE pragmas that the Plinth plugin adds.
-RELEASE_FLAVOUR="release+expose_unfoldings"
+# The boot libraries need no special flags for the Plinth compiler: the
+# compiler that builds them adds the INLINABLE pragmas, as for user code.
+# See Note [Default INLINABLE pragmas] in ghc:GHC.Tc.Module.
+RELEASE_FLAVOUR="release"
 # Note [Lean CI flavour]
 # ~~~~~~~~~~~~~~~~~~~~~~~
-# The dev/CI flavour is just "release" (+expose_unfoldings, see above):
+# The dev/CI flavour is just "release":
 #  - debug_info/debug_ghc compile GHC and its libraries with DWARF (-g3), which
 #    inflates the build tree 2-3x and is the main disk-space hog on CI runners;
 #  - +assertions builds GHC with -DDEBUG, which slows compilation of GHC itself
 #    *and* of every package built with the resulting compiler (i.e. the Plinth
 #    test project). Dropping it keeps CI within its time budget.
 # Use RELEASE=1 for a clean release build (adds docs etc.).
-DEV_FLAVOUR="release+expose_unfoldings"
+DEV_FLAVOUR="release"
 
 # platform-specific default configure arguments
 case "$UNAME_S" in
