@@ -105,9 +105,12 @@ interface file.
 You do not need `{-# INLINEABLE #-}` pragmas for this:
 
 - plinthc marks each definition that has no inline pragma of its own as
-  `INLINEABLE`, so GHC keeps its unfolding.
-- The `base`, `ghc-prim` and `ghc-bignum` libraries that come with plinthc
-  have the unfoldings of all their definitions.
+  `INLINEABLE`, so GHC keeps its unfolding. It also changes a `NOINLINE`
+  pragma with a phase (for example `NOINLINE [1]`) to `INLINEABLE` with the
+  same phase.
+- The boot libraries that come with plinthc (for example `base` and
+  `containers`) are built the same way. The only exception is the `ghc`
+  library (the GHC API), which Plinth code does not use.
 - In plinthc, `-O0` does not set `-fomit-interface-pragmas` and
   `-fignore-interface-pragmas`, which remove unfoldings. Thus you can build
   Plinth code with `-O0`.

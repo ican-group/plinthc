@@ -35,8 +35,8 @@ highlights:
   - title: No <code>INLINEABLE</code> pragmas, works at <code>-O0</code>
     text: >-
       plinthc keeps the definitions the Plinth compiler needs available
-      without pragmas, and its <code>base</code>, <code>ghc-prim</code> and
-      <code>ghc-bignum</code> libraries ship ready for Plinth. You can build
+      without pragmas, also in its boot libraries, for example
+      <code>base</code> and <code>containers</code>. You can build
       Plinth code with <code>-O0</code>.
     links:
       - text: The Plinth contract language

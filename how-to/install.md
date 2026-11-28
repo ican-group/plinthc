@@ -18,7 +18,7 @@ plinthc:
 
 ```console
 $ ghcup config add-release-channel https://raw.githubusercontent.com/ican-group/plinthc/ghcup-channel/ghcup-plinthc.yaml
-$ ghcup install plinthc 9.12.172.1 --set
+$ ghcup install plinthc 9.12.172.2 --set
 ```
 
 You add the channel only once: later `ghcup` commands for plinthc
@@ -30,7 +30,7 @@ already on `PATH` for ghcup users.
 
 > To install without changing the ghcup configuration, give the channel to
 > one command with `--url-source`:
-> `ghcup --url-source=https://raw.githubusercontent.com/ican-group/plinthc/ghcup-channel/ghcup-plinthc.yaml install plinthc 9.12.172.1 --set`.
+> `ghcup --url-source=https://raw.githubusercontent.com/ican-group/plinthc/ghcup-channel/ghcup-plinthc.yaml install plinthc 9.12.172.2 --set`.
 > ghcup does not keep the channel, so you must give `--url-source` again for
 > each later plinthc command.
 
@@ -90,13 +90,13 @@ Use a 9.6-based release if your project or one of its dependencies does not
 build with GHC 9.12 yet:
 
 ```console
-$ ghcup install plinthc 9.6.172.1 --set
+$ ghcup install plinthc 9.6.172.2 --set
 ```
 
-Then use `plinthc-9.6.172.1` and `plinthc-pkg-9.6.172.1` in your
+Then use `plinthc-9.6.172.2` and `plinthc-pkg-9.6.172.2` in your
 `cabal.project` (see [Use plinthc in a project]({% link how-to/use.md %})),
 and the `ghc-plinth-plutus` commit of that release:
-`9a524ece4853086df34c90733195a01211329610`.
+`cd102e81d8ce63af3688cee15b42af3ebbf1886e`.
 
 Once installed, head over to
 [Use plinthc in a project]({% link how-to/use.md %}).
