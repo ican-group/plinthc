@@ -90,7 +90,7 @@ You need:
 - the [GHCi lock tutorial]({% link tutorials/lock-and-unlock-ghci.md %})
   completed: Yaci DevKit, socat, GHC 9.6.7 and the system libraries of
   `cardano-api`;
-- `plinthc` 9.12.172.1, installed as in
+- `plinthc` 9.12.172.2, installed as in
   [the first tutorial]({% link tutorials/first-smart-contract.md %}).
 
 You make two projects, as in the lock tutorials:
@@ -110,8 +110,8 @@ Make a directory `auction` with three files.
 ```haskell
 -- The plinthc release. The ghc-plinth-plutus tag below must be the commit
 -- that this release is built from.
-with-compiler: plinthc-9.12.172.1
-with-hc-pkg:   plinthc-pkg-9.12.172.1
+with-compiler: plinthc-9.12.172.2
+with-hc-pkg:   plinthc-pkg-9.12.172.2
 
 packages: .
 
@@ -135,7 +135,7 @@ index-state:
 source-repository-package
   type: git
   location: https://github.com/ican-group/ghc-plinth-plutus
-  tag: 9a524ece4853086df34c90733195a01211329610
+  tag: cd102e81d8ce63af3688cee15b42af3ebbf1886e
   subdir: plutus-tx
           plutus-core
           plutus-ledger-api

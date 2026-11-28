@@ -36,7 +36,7 @@ tool:
 
 ```console
 $ ghcup config add-release-channel https://raw.githubusercontent.com/ican-group/plinthc/ghcup-channel/ghcup-plinthc.yaml
-$ ghcup install plinthc 9.12.172.1 --set
+$ ghcup install plinthc 9.12.172.2 --set
 ```
 
 Check that the compiler is on `PATH`:
@@ -45,14 +45,14 @@ Check that the compiler is on `PATH`:
 $ plinthc --version
 ```
 
-If you have already installed 9.12.172.1 this way, skip to step 2.
+If you have already installed 9.12.172.2 this way, skip to step 2.
 
 ## Step 2: Create the project
 
 Make a new directory and add the three files below.
 
 **`cabal.project`** wires up the build. It points cabal at `plinthc`
-9.12.172.1 and its `ghc-pkg` (installed by ghcup as `plinthc-pkg-9.12.172.1`,
+9.12.172.2 and its `ghc-pkg` (installed by ghcup as `plinthc-pkg-9.12.172.2`,
 so that it does not collide with your regular GHC); pulls the
 Plinth libraries (`plutus-tx`, `plutus-core`) from the
 `ghc-plinth-plutus` fork the compiler was built against; uses the Cardano
@@ -63,8 +63,8 @@ crypto C libraries (`libsodium`, `secp256k1`, `blst`) from source via the
 ```haskell
 -- The plinthc release. The ghc-plinth-plutus tag below must be the commit
 -- that this release is built from.
-with-compiler: plinthc-9.12.172.1
-with-hc-pkg:   plinthc-pkg-9.12.172.1
+with-compiler: plinthc-9.12.172.2
+with-hc-pkg:   plinthc-pkg-9.12.172.2
 
 packages: .
 
@@ -88,7 +88,7 @@ index-state:
 source-repository-package
   type: git
   location: https://github.com/ican-group/ghc-plinth-plutus
-  tag: 9a524ece4853086df34c90733195a01211329610
+  tag: cd102e81d8ce63af3688cee15b42af3ebbf1886e
   subdir: plutus-tx
           plutus-core
 
@@ -131,7 +131,7 @@ package sodium-clib
 
 Use the `ghc-plinth-plutus` commit that matches your `plinthc`: the compiler and
 these libraries are released together as a matched set, built from the same
-commit. The commit above matches release 9.12.172.1, the release in
+commit. The commit above matches release 9.12.172.2, the release in
 `with-compiler`. To use a different release, change `with-compiler`,
 `with-hc-pkg` and this `tag` together. The commit of a release is the `plutus`
 submodule of its tag (`v<version>`) in

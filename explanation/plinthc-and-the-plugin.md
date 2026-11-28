@@ -18,7 +18,10 @@ package:
 The page also tells how the tests check the first two differences. The changes are in
 all releases since 9.6.170.1 and 9.12.170.1. The last location fallback (the
 start of the module, see below) and the tests below are in all releases since
-9.6.170.2 and 9.12.170.2.
+9.6.170.2 and 9.12.170.2. GHC adds the `INLINEABLE` pragmas (also in the boot
+libraries) since 9.6.172.2 and 9.12.172.2. Before, the built-in plugin added
+them, and of the boot libraries only `base`, `ghc-prim` and `ghc-bignum` (and
+`ghc-internal` for GHC 9.12) had all their unfoldings.
 
 ## No `INLINEABLE` pragmas
 
@@ -61,8 +64,8 @@ on its own. The fix is `{-# INLINEABLE sumTo #-}` in `Helpers`.
 
 ### With plinthc
 
-The plugin is built into the compiler, so its `INLINEABLE` pass applies to
-each module that plinthc compiles. The `Helpers` module above compiles without
+GHC itself adds the `INLINEABLE` pragmas, in each module that it compiles, also
+when it builds its own boot libraries. The `Helpers` module above compiles without
 the pragma (this `sumTo` is one of the functions of the
 [no-pragmas test](#how-the-tests-check-this)). In plinthc, `-O0` does not set
 `-fomit-interface-pragmas`, so a module with `-O0` keeps its unfoldings.
@@ -76,12 +79,15 @@ This is true for:
   and instances;
 - modules compiled at all optimisation levels (`-O0`, `-O1` and `-O2`),
   unless a module sets `-fomit-interface-pragmas`;
-- the definitions of the `base`, `ghc-prim` and `ghc-bignum` libraries that
-  come with plinthc (and `ghc-internal` for GHC 9.12). The other boot
-  libraries, for example `containers`, `bytestring` and `text`, do not have
-  this. Their code is built on features that Plinth does not support (machine
-  `Int`, primitive arrays, the FFI), and Plinth has its own types for these
-  uses: `PlutusTx.AssocMap`, `BuiltinByteString` and `BuiltinString`.
+- the boot libraries that come with plinthc, for example `base` and
+  `containers` (but not the `ghc` library, the GHC API). Plinth can compile a
+  function of these libraries if the function uses only features that Plinth
+  supports: for example, `foldTree` from `Data.Tree`, but not the functions
+  that use machine `Int`, primitive arrays or the FFI.
+
+GHC also changes a `NOINLINE` pragma with a phase (for example
+`NOINLINE [1] f`, which `base` uses for list fusion) to `INLINEABLE` with the
+same phase. Thus `map`, `filter`, `++` and similar functions are available.
 
 How it works:
 [Unfoldings and `INLINEABLE`]({% link explanation/plinth-language.md %}#unfoldings-and-inlineable).
@@ -174,11 +180,11 @@ is off by default, because it makes the compilation slower.
 
 Two test suites in the plinthc repository check the two changes. The script
 `plinthc-test.sh` runs them, with the test suites of the Plinth compiler.
-The links below are to release 9.12.172.1.
+The links below are to release 9.12.172.2.
 
 | Test suite | What it checks |
 |------------|----------------|
-| [`plinth/test/no-pragmas`][no-pragmas] | A script that uses functions, a class and its instances, and recursive and mutually recursive functions from two other modules and from [another package][no-pragmas-dep]. No module has an `INLINEABLE` pragma. Two modules use `-O0`, the others `-O1`. The other package does not set the GHC flags of a Plinth project. The test compiles the script, runs it, and checks the result. It also checks that a wrong input makes the script fail. |
+| [`plinth/test/no-pragmas`][no-pragmas] | A script that uses functions, a class and its instances, and recursive and mutually recursive functions from two other modules, from [another package][no-pragmas-dep], and from the `Data.Tree` module of the `containers` boot library. No module has an `INLINEABLE` pragma. Two modules use `-O0`, the others `-O1`. The other package does not set the GHC flags of a Plinth project. The test compiles the script, runs it, and checks the result. It also checks that a wrong input makes the script fail. |
 | [`plinth/test/errors`][errors] | 28 programs. Each one uses a construct that Plinth does not support. Each program compiles with and without `preserve-source-locations` (56 compilations). The test compares the full compiler output with an expected file. A second check fails if an error has no source location. Two programs have the error in an imported module. The [README][errors-readme] gives the location of each error. |
 
 The CI of the plinthc repository runs `plinthc-test.sh` on Linux (x86-64 and
@@ -187,10 +193,10 @@ compilers. The release job runs only after all the test jobs pass, so each
 release passed these tests on each platform. To run the tests yourself, see
 [Test and benchmark]({% link how-to/build.md %}#test-and-benchmark).
 
-[no-pragmas]: https://github.com/ican-group/plinthc/blob/v9.12.172.1/plinth/test/no-pragmas/Main.hs
-[no-pragmas-dep]: https://github.com/ican-group/plinthc/blob/v9.12.172.1/plinth/test/no-pragmas-dep/src/NoPragmasDep.hs
-[errors]: https://github.com/ican-group/plinthc/tree/v9.12.172.1/plinth/test/errors
-[errors-readme]: https://github.com/ican-group/plinthc/blob/v9.12.172.1/plinth/test/errors/README.md
+[no-pragmas]: https://github.com/ican-group/plinthc/blob/v9.12.172.2/plinth/test/no-pragmas/Main.hs
+[no-pragmas-dep]: https://github.com/ican-group/plinthc/blob/v9.12.172.2/plinth/test/no-pragmas-dep/src/NoPragmasDep.hs
+[errors]: https://github.com/ican-group/plinthc/tree/v9.12.172.2/plinth/test/errors
+[errors-readme]: https://github.com/ican-group/plinthc/blob/v9.12.172.2/plinth/test/errors/README.md
 
 ## Other differences
 
